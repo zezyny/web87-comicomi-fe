@@ -136,6 +136,11 @@ const DashboardLayout = () => {
                 </Header>
                 <Content
                     style={{
+                        margin: '24px 16px',
+                        padding: 24,
+                        minHeight: 280,
+                        overflowX:"hidden",
+                        overflowY:"auto"
                         height: '80%',
                         width: '90%',
                         margin: 'auto',
