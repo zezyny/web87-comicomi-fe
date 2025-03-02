@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat+Subrayada:wght@400;700&family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+*{
+    box-sizing: border-box;
+}
+.welcome{
+    width: 100%;
+    border: 1px solid black;
+    height: 25vh;
+    border-radius: 1rem;
+    background-color: #151515;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.welcome *{
+    color: white;
+    
+}
+.welcome h2{
+    font-family: "Montserrat", sans-serif;
+    padding: 1rem;
+}
+.welcome span{
+    font-size: 2rem;
+}
+.content{
+    /* margin-top: 1rem; */
+    min-height: 100px;
+}
+.tools{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    padding: 0.5rem;
+}
+.icon-large {
+    font-size: 2rem;
+}
+.addButton{
+    border-radius: 100px;
+    border: none;
+    background: none;
+}
+.addButton:hover{
+    border-radius: 100px;
+    aspect-ratio: 1/1;
+    border: none;
+    background: none;
+    background-color: #ececec;
+    cursor: pointer;
+}
+.table{
+    margin-top: 0.5rem;
+    border: 1px solid black;
+    min-height: 10vh;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+}
+.table table{
+    width: 100%;
+    text-align: left;
+}
