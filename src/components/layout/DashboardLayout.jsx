@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo2 from '../../assets/logo2.png'
 import logo1 from '../../assets/logo1.png'
 import { Layout, Menu, Button, theme, Image, Breadcrumb, Dropdown, Flex, Typography } from "antd";
@@ -15,6 +15,7 @@ import {
     CaretDownOutlined,
 } from "@ant-design/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import userApi from '../../api/userApi';
 const { Sider, Header, Content } = Layout;
 
 const DashboardLayout = () => {
@@ -77,7 +78,16 @@ const DashboardLayout = () => {
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
-                style={{ height: '100vh', position: 'sticky' }}
+                style={{
+                    height: '100vh',
+                    position: 'sticky',
+                    overflow: 'auto',
+                    insetInlineStart: 0,
+                    top: 0,
+                    bottom: 0,
+                    scrollbarWidth: 'thin',
+                    scrollbarGutter: 'stable',
+                }}
                 theme='light'
             >
                 <img src={collapsed ? logo2 : logo1} style={{ width: '100%', padding: '20px', marginBottom: '70px', transition: 'opacity 1s ease-in-out' }} />
@@ -85,7 +95,15 @@ const DashboardLayout = () => {
             </Sider>
             <Layout>
                 <Header
-                    style={{ backgroundColor: '#445489', paddingRight: '20px', paddingLeft: 0 }}
+                    style={{
+                        backgroundColor: '#445489',
+                        paddingRight: '20px',
+                        paddingLeft: 0,
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 1,
+                        width: '100%'
+                    }}
                 >
                     <Flex justify='space-between' align='center'>
                         <Flex align='center'>
@@ -118,9 +136,10 @@ const DashboardLayout = () => {
                 </Header>
                 <Content
                     style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        minHeight: 280
+                        height: '80%',
+                        width: '90%',
+                        margin: 'auto',
+                        marginTop: '20px'
                     }}
                 >
                     <Outlet />
