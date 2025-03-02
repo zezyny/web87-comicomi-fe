@@ -7,6 +7,7 @@ import StoriesManager from './pages/dashboard/StoryManagement'
 import DashboardLayout from './components/layout/DashboardLayout'
 import HomePage from './pages/home/HomePage'
 import AuthForm from './pages/development/DevUseLoginRegister'
+import UserManagementDetail from './pages/dashboard/UserManagementDetail'
 
 function App() {
 
@@ -19,6 +20,8 @@ function App() {
           <Route path='/dashboard/main' element={<Dashboard />} />
           <Route path='/dashboard/users' element={<UserManagement />} />
           <Route path='/dashboard/stories' element={<StoriesManager />} />
+          <Route path='/dashboard/users/:id/detail' element={<UserManagementDetail />} />
+          <Route path='/dashboard/stories' element={<StoryManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>
