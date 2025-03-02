@@ -21,7 +21,6 @@ function App() {
           <Route path='/dashboard/users' element={<UserManagement />} />
           <Route path='/dashboard/stories' element={<StoriesManager />} />
           <Route path='/dashboard/users/:id/detail' element={<UserManagementDetail />} />
-          <Route path='/dashboard/stories' element={<StoryManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>

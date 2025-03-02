@@ -140,7 +140,7 @@ const DashboardLayout = () => {
                         padding: 24,
                         minHeight: 280,
                         overflowX:"hidden",
-                        overflowY:"auto"
+                        overflowY:"auto",
                         height: '80%',
                         width: '90%',
                         margin: 'auto',
