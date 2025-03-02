@@ -8,7 +8,7 @@ createRoot(document.getElementById('root')).render(
     theme={{
       token: {
         colorPrimary: '#445489',
-        colorBgContainer: '#ddd',
+        colorBgContainer: '#fff',
         colorBgBase: '#f4f3f9',
         borderRadius: 10
       },
