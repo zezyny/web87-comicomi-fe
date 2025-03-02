@@ -1,58 +1,59 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useCookies, Cookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import { Button, Table, Modal, Form, Input, Select, message, Spin, Result } from 'antd';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { TfiPencil, TfiTrash } from "react-icons/tfi";
 import { useNavigate } from 'react-router-dom';
 
-import '../../components/commons/header.css'
-import './StoryManager.css'
+import '../../components/commons/header.css' // Updated CSS import
+import './StoryManager.css' // Updated CSS import
 
-const API_BASE_URL = 'http://localhost:8080/api/v2/stories'; // Adjust if needed
-const AUTH_API_BASE_URL = 'http://localhost:8080/auth'; // Auth endpoints
+const API_BASE_URL = 'http://localhost:8080/api/v2/stories';
+const AUTH_API_BASE_URL = 'http://localhost:8080/auth';
 
 const StoriesManager = () => {
     const [stories, setStories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
     const [form] = Form.useForm();
-    const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'refreshToken', 'userRole', 'userId']); 
+    const [cookies, setCookie] = useCookies(['accessToken', 'userRole', 'userId', 'refreshToken']);
     const userRole = cookies.userRole;
     const userId = cookies.userId;
     const [searchInput, setSearchInput] = useState('');
     const tableRef = useRef(null);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const [testModalVisible, setTestModalVisible] = useState(false);
+    const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+    const [deleteObjectId, setDeleteObjectId] = useState('')
+    const [deleteObjectName, setDeleteObjectName] = useState('')
 
 
     useEffect(() => {
         loadStories();
     }, [searchInput]);
 
-
-    // Axios Response Interceptor for Immediate Logout on 401/403
     useEffect(() => {
         const interceptor = axios.interceptors.response.use(
-            response => response, // Pass thr successful responses
+            response => response,
             error => {
                 if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                     console.error("Authentication error (401/403), redirecting to login:", error);
-                    removeCookie('accessToken'); // Clear cookies
-                    removeCookie('refreshToken');
-                    removeCookie('userRole');
-                    removeCookie('userId');
+                    setCookie('accessToken', ''); // removeCookie is available from useCookies
+                    setCookie('refreshToken', '');
+                    setCookie('userRole', '');
+                    setCookie('userId', '');
                     message.error("Session expired. Please login again.");
-                    navigate('/login'); // Redirect to login page
+                    navigate('/login');
                 }
-                return Promise.reject(error); // Reject all errors
+                return Promise.reject(error);
             }
         );
 
         return () => {
-            axios.interceptors.response.eject(interceptor); // Eject interceptor on component unmount
+            axios.interceptors.response.eject(interceptor);
         };
-    }, [removeCookie, navigate]); // Dependencies for useEffect
-
+    }, [navigate]); // Removed removeCookie from dependencies - per request
 
     const loadStories = async () => {
         setLoading(true);
@@ -62,18 +63,16 @@ const StoriesManager = () => {
                 url = `${API_BASE_URL}/creator/${userId}`;
             }
 
-            const response = await axios.get(url, { // Axios will automatically use the interceptor
+            const response = await axios.get(url, {
                 params: { search: searchInput }
             });
 
             setStories(response.data.stories);
             setLoading(false);
         } catch (error) {
-            console.error("Error loading stories:", error); 
+            console.error("Error loading stories:", error);
             setLoading(false);
-            if (error.response && (error.response.status !== 401 && error.response.status !== 403)) {
-                message.error("Failed to load stories."); 
-            }
+            message.error("Failed to load stories.");
         }
     };
 
@@ -87,50 +86,72 @@ const StoriesManager = () => {
     };
 
     const handleCreateStory = async (values) => {
-        setLoading(true); 
+        setLoading(true);
         try {
-            await axios.post(API_BASE_URL, values, { 
+            await axios.post(API_BASE_URL, values, {
                 headers: { Authorization: `Bearer ${cookies.accessToken}` }
             });
             message.success("Story created successfully!");
             setIsCreateModalVisible(false);
             form.resetFields();
-            loadStories(); // Reload stories after creation
+            loadStories();
         } catch (error) {
-            console.error("Error creating story:", error); 
+            console.error("Error creating story:", error);
             message.error("Failed to create story.");
         } finally {
-            setLoading(false); // Set loading to false after creation attempt (success or fail)
+            setLoading(false);
         }
     };
 
-
     const handleDeleteStory = async (storyId) => {
+        console.log("handleDeleteStory called for storyId:", storyId);
         try {
-            await axios.delete(`${API_BASE_URL}/${storyId}`, { 
+            console.log("Attempting DELETE request for storyId:", storyId);
+            const response = await axios.delete(`${API_BASE_URL}/${storyId}`, {
                 headers: { Authorization: `Bearer ${cookies.accessToken}` }
             });
+            console.log("DELETE request successful. Response:", response);
             message.success("Story deleted successfully!");
             setStories(currentStories => currentStories.filter(story => story._id !== storyId));
             if (tableRef.current) {
-                tableRef.current.scrollTo({ top: 0 }); 
+                tableRef.current.scrollTo({ top: 0 });
             }
         } catch (error) {
-            console.error("Error deleting story:", error);
+            console.error("Error in handleDeleteStory:", error);
+            if (error.response) {
+                console.error("Error Response Status:", error.response.status);
+                console.error("Error Response Data:", error.response.data);
+            } else {
+                console.error("Error Details (No Response):", error);
+            }
             message.error("Failed to delete story.");
-            loadStories(); // Fallback to full reload on error
+            loadStories();
         }
     };
 
+    const confirmDeleteStoryOK = () =>{
+        setConfirmModalVisible(false)
+        handleDeleteStory(deleteObjectId);
+    }
 
-    const confirmDeleteStory = (storyId) => {
-        Modal.confirm({
-            title: 'Are you sure you want to delete this story?',
-            content: 'This action cannot be undone.',
-            onOk: () => handleDeleteStory(storyId),
-        });
+    const confirmDeleteStoryCancel = () =>{
+        setConfirmModalVisible(false)
+        setDeleteObjectId('')
+        setDeleteObjectName('')
+    }
+
+
+    const confirmDeleteStory = (storyId, title) => {
+        console.log("confirmDeleteStory called for storyId:", storyId);
+        setDeleteObjectId(storyId)
+        setDeleteObjectName(title)
+        setConfirmModalVisible(true)
+        // Modal.confirm({
+        //     title: 'Are you sure you want to delete this story?',
+        //     content: 'This action cannot be undone.',
+        //     onOk: () => handleDeleteStory(storyId),
+        // });
     };
-
 
     const columns = [
         {
@@ -155,13 +176,31 @@ const StoriesManager = () => {
             render: (_, record) => (
                 <>
                     <Button icon={<TfiPencil />} type="link" onClick={() => { /* TODO: Implement Edit */ }} disabled={userRole !== 'admin' && userRole !== 'creator'}>Edit</Button>
-                    <Button icon={<TfiTrash />} type="link" danger onClick={() => confirmDeleteStory(record._id)} disabled={userRole !== 'admin' && userRole !== 'creator'}>Delete</Button>
+                    <Button
+                        icon={<TfiTrash />}
+                        type="link"
+                        danger
+                        onClick={() => {
+                            console.log("Delete button clicked for storyId:", record._id, 'Record:', record);
+                            confirmDeleteStory(record._id, record.title);
+                        }}
+                        disabled={userRole !== 'admin' && userRole !== 'creator'}
+                    >
+                        Delete
+                    </Button>
                 </>
             ),
         },
     ];
 
     const isAuthorized = userRole === 'admin' || userRole === 'creator';
+
+    const showTestModal = () => {
+        setTestModalVisible(true);
+    };
+    const handleTestModalCancel = () => {
+        setTestModalVisible(false);
+    };
 
     return (
         <>
@@ -186,6 +225,7 @@ const StoriesManager = () => {
                                 onChange={(e) => setSearchInput(e.target.value)}
                                 style={{ width: 300, marginInlineStart: 16 }}
                             />
+                            {/* <Button onClick={showTestModal} style={{ marginTop: 20, marginInlineStart: 16 }}>Show Test Modal</Button> */}
                         </div>
                         <div className="table">
                             {loading ? (
@@ -198,7 +238,7 @@ const StoriesManager = () => {
                                     dataSource={stories}
                                     rowKey="_id"
                                     ref={tableRef}
-                                    pagination={{ pageSize: 50 }} 
+                                    pagination={{ pageSize: 50 }}
                                 />
                             )}
                         </div>
@@ -237,7 +277,6 @@ const StoriesManager = () => {
                                     rules={[{ required: true, message: 'Please select genres!' }]}
                                 >
                                     <Select mode="multiple" placeholder="Select genres">
-                                        {/* Mot load tu server */}
                                         <Select.Option value="comedy">Comedy</Select.Option>
                                         <Select.Option value="drama">Drama</Select.Option>
                                         <Select.Option value="fantasy">Fantasy</Select.Option>
@@ -271,6 +310,39 @@ const StoriesManager = () => {
                                 </Form.Item>
                             </Form>
                         </Modal>
+                        
+                        
+                        <Modal
+                            title={"Are you sure to delete " + deleteObjectName + "?"}
+                            visible={confirmModalVisible}
+                            onCancel={handleTestModalCancel}
+                            footer={[
+                                <Button key="back" onClick={confirmDeleteStoryCancel}>
+                                    Cancel
+                                </Button>,
+                                <Button key="submit" type="primary" onClick={confirmDeleteStoryOK} style={{backgroundColor:"#FF0000"}}>
+                                    Delete
+                                </Button>,
+                            ]}
+                        >
+                        </Modal>
+
+                        <Modal
+                            title="Test Modal"
+                            visible={testModalVisible}
+                            onCancel={handleTestModalCancel}
+                            footer={[
+                                <Button key="back" onClick={handleTestModalCancel}>
+                                    Return
+                                </Button>,
+                                <Button key="submit" type="primary" onClick={handleTestModalCancel}>
+                                    Submit
+                                </Button>,
+                            ]}
+                        >
+                            <p>This is a test modal to check if Ant Design Modals are rendering.</p>
+                        </Modal>
+
                     </>
                 ) : (
                     <Result
