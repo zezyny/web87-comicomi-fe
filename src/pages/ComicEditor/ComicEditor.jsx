@@ -182,6 +182,9 @@ function ComicEditor() {
   const [autoAddImages, setAutoAddImages] = useState([]);
   const [isTrashHovering, setIsTrashHovering] = useState(false);
   const [activeView, setActiveView] = useState("mobile_view");
+  // const [scrollDown, setScrollDown]
+  const viewportRef = useRef(null);
+
 
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
@@ -294,9 +297,17 @@ function ComicEditor() {
       else {
         newContentItems = updatedItems;
       }
+      if (contentItems.length > 0 && viewportRef.current) {
+        // Scroll to the bottom after a new item is added
+        const lastContentItem = viewportRef.current.lastElementChild;
+        if (lastContentItem) {
+          lastContentItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+      }
       console.log("contentItems after handleDrop:", newContentItems);
       return newContentItems;
     });
+
   }, []);
 
 
@@ -334,27 +345,29 @@ function ComicEditor() {
 
 
   const ViewportDropZone = ({ children }) => {
-    const viewportRef = useRef(null);
 
-    const handleScroll = useCallback((direction) => {
-      if (!viewportRef.current) return;
+    // const handleScroll = useCallback((direction) => {
+    //   if (!viewportRef.current) return;
 
-      const scrollSpeed = 10;
-      const scrollAmount = direction === 'down' ? scrollSpeed : -scrollSpeed;
+    //   const scrollSpeed = 10;
+    //   const scrollAmount = direction === 'down' ? scrollSpeed : -scrollSpeed;
 
-      viewportRef.current.scrollTop += scrollAmount;
-    }, [viewportRef]);
+    //   viewportRef.current.scrollTop += scrollAmount;
+    // }, [viewportRef]);
+    // const handleScroll = () =>{
+
+    // }
 
 
     const [collectedProps, trashDrop] = useDrop(() => ({
       accept: [ItemTypes.IMAGE, ItemTypes.COMPONENT, ItemTypes.CONTENT_ITEM, ItemTypes.COMPONENT_ADS, ItemTypes.COMPONENT_SEP, ItemTypes.COMPONENT_SPACING],
       drop: (item, monitor) => {
         console.log(`ViewportDropZone: Drop on Trash - Item Type: ${item.type}, Index: ${item.index}`);
-        if (item.type === ItemTypes.CONTENT_ITEM) {
-          removeContentItem(item.index);
-          return { type: 'trash' };
-        }
+        // if (item.type === ItemTypes.CONTENT_ITEM) {
+        removeContentItem(item.index);
         return { type: 'trash' };
+        // }
+        // return { type: 'trash' };
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
@@ -393,10 +406,10 @@ function ComicEditor() {
     useEffect(() => {
       if (contentItems.length > 0 && viewportRef.current) {
         // Scroll to the bottom after a new item is added
-        const lastContentItem = viewportRef.current.lastElementChild;
-        if (lastContentItem) {
-          lastContentItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
+        // const lastContentItem = viewportRef.current.lastElementChild;
+        // if (lastContentItem) {
+        //   lastContentItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        // }
       }
     }, [contentItems]);
 
@@ -437,7 +450,7 @@ function ComicEditor() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="pageContainer">
-        <Header />
+        <Header pageTitle="Comic Editor tool (BETA)."/>
         <div className='ComicEditorContainer'>
           <div className="ComponentBar HoverContainer">
             <div className="file-upload-section">
