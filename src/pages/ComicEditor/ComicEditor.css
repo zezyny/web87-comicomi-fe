@@ -389,8 +389,8 @@
     opacity: 0.5;
     transition: opacity 0.2s, color 0.2s;
     z-index: 1000;
-    width: 5rem;
-    height: 5rem;
+    width: 10rem;
+    height: 10rem;
     display: flex;
     align-items: center;
     justify-content: center;
