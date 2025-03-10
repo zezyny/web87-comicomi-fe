@@ -9,6 +9,7 @@ import HomePage from './pages/home/HomePage'
 import AuthForm from './pages/development/DevUseLoginRegister'
 import UserManagementDetail from './pages/dashboard/UserManagementDetail'
 import ComicEditor from './pages/ComicEditor/ComicEditor'
+import NovelEditor from './pages/NovelEditor/NovelEditor'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<AuthForm/>}/>
         <Route path='/editor/comic' element={<ComicEditor />}/>
+        <Route path='/editor/novel' element={<NovelEditor />}/>
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='/dashboard/main' element={<Dashboard />} />
           <Route path='/dashboard/users' element={<UserManagement />} />
