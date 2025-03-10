@@ -1,155 +1,108 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import userApi from '../../api/userApi.js'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Button, Image, Input, Popconfirm, Space, Table, Tag } from 'antd'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Breadcrumb, Button, Image, Input, message, Pagination, Popconfirm, Result, Space, Table, Tag, Typography } from 'antd'
 import { DeleteFilled, DeleteOutlined, DeleteTwoTone, DollarOutlined, DollarTwoTone, SearchOutlined } from '@ant-design/icons';
 import Highlighter from "react-highlight-words";
+import { SearchUser } from '../../components/user/SearchUser.jsx';
+import { useCookies } from 'react-cookie';
 
 const UserManagement = () => {
-    // const [searchParams, setSearchParams] = useSearchParams()
-    // const keyword = searchParams.get('keyword') ?? ''
-    // const page = searchParams.get("page") ?? 1;
-    // const pageSize = searchParams.get("pageSize") ?? 10;
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const searchInput = useRef(null);
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSearchText(selectedKeys[0]);
-        setSearchedColumn(dataIndex);
-    };
-    const handleReset = (clearFilters) => {
-        clearFilters();
-        setSearchText('');
-    };
-    const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-            <div
-                style={{
-                    padding: 8,
-                }}
-                onKeyDown={(e) => e.stopPropagation()}
-            >
-                <Input
-                    ref={searchInput}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{
-                        marginBottom: 8,
-                        display: 'block',
-                    }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{
-                            width: 90,
-                        }}
-                    >
-                        Search
-                    </Button>
-                    <Button
-                        onClick={() => clearFilters && handleReset(clearFilters)}
-                        size="small"
-                        style={{
-                            width: 90,
-                        }}
-                    >
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({
-                                closeDropdown: false,
-                            });
-                            setSearchText(selectedKeys[0]);
-                            setSearchedColumn(dataIndex);
-                        }}
-                    >
-                        Filter
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            close();
-                        }}
-                    >
-                        close
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: (filtered) => (
-            <SearchOutlined
-                style={{
-                    color: filtered ? '#1677ff' : undefined,
-                }}
-            />
-        ),
-        onFilter: (value, record) =>
-            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        filterDropdownProps: {
-            onOpenChange(open) {
-                if (open) {
-                    setTimeout(() => searchInput.current?.select(), 100);
-                }
-            },
-        },
-        render: (text) =>
-            searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{
-                        backgroundColor: '#ffc069',
-                        padding: 0,
-                    }}
-                    searchWords={[searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-
+    const [searchParams, setSearchParams] = useSearchParams()
+    const keyword = searchParams.get('keyword') ?? ''
+    const page = searchParams.get("page") ?? 1;
+    const pageSize = searchParams.get("pageSize") ?? 10;
+    const [orderBy, setOrderBy] = useState(searchParams.get('orderBy') || 'createAt');
+    const [orderDirection, setOrderDirection] = useState(searchParams.get('orderDirection') || 'desc');
+    const [deleteCounter, setDeleteCounter] = useState(0);
+    const [currentUser, setCurrentUser] = useState(null)
+    const [loading, setLoading] = useState(false);
+    const [cookies] = useCookies(['accessToken', 'userRole', 'userId', 'refreshToken']);
     const [userData, setUserData] = useState({
         users: [],
         total: 0
     })
-
     const navigate = useNavigate()
-
-    // const changePage = (page, pageSize) => {
-    //     setSearchParams({
-    //         keyword,
-    //         page,
-    //         pageSize
-    //     })
-    // }
-
-    const fetchUsers = async () => {
-        const response = await userApi.getAllUsers()
-        const newUserData = {
-            users: response.data.map((user) => ({
-                ...user,
-            }))
-        }
-        setUserData(newUserData)
+    const fetchCurrentUser = async (id) => {
+        const response = await userApi.getUser(id)
+        setCurrentUser(response.data)
     }
 
     useEffect(() => {
-        fetchUsers()
-    }, [])
-    console.log(userData);
+        fetchCurrentUser(cookies.userId);
 
+    }, [cookies.userId]);
+    const breadcrumbItems = [{
+        title: 'Dashboard',
+        href: '/dashboard/main'
+    },
+    {
+        title: 'User Management'
+    }
+    ]
+    const fetchUsers = async () => {
+        try {
+            setLoading(true)
+            const response = await userApi.getUsers({
+                keyword,
+                page,
+                pageSize,
+                orderBy,
+                orderDirection,
+            });
+
+            const newUserData = {
+                users: response.data.users.map((user) => ({
+                    ...user,
+                })),
+                total: response.data.total,
+            };
+
+            setUserData(newUserData);
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers()
+        console.log(userData);
+    }, [keyword, page, pageSize, deleteCounter, orderBy, orderDirection])
+
+    const searchUsers = ({ keyword }) => {
+        setSearchParams({
+            keyword: keyword,
+        });
+    };
+
+    const handleDeleteUser = async (id) => {
+        setDeleteCounter(prev => prev + 1)
+        await userApi.deleteUser(id)
+        message.success('User deleted successfully')
+    }
+    const handleTableChange = (pagination, filters, sorter) => {
+        if (sorter) {
+            const fieldMapping = {
+                'name': 'userName',
+                'email': 'email',
+                'createdAt': 'createdAt'
+            };
+
+            const newOrderBy = fieldMapping[sorter.field] || 'createdAt';
+            const newOrderDirection = sorter.order === 'ascend' ? 'asc' : 'desc';
+
+            setOrderBy(newOrderBy);
+            setOrderDirection(newOrderDirection);
+            setSearchParams({
+                keyword,
+                page: 1,
+                pageSize,
+                orderBy: newOrderBy,
+                orderDirection: newOrderDirection,
+            });
+        }
+    };
     const dataSource = userData.users.map((user) => {
         return {
             key: user.id,
@@ -164,8 +117,9 @@ const UserManagement = () => {
                     description="Are you sure to delete this user?"
                     okText="Yes"
                     cancelText="No"
+                    onConfirm={() => handleDeleteUser(user.id)}
                 >
-                    <Button danger style={{ fontSize: '16px' }}><DeleteOutlined /></Button>
+                    <Button danger style={{ fontSize: '16px' }} ><DeleteOutlined /></Button>
                 </Popconfirm>
             </div>
         }
@@ -184,8 +138,9 @@ const UserManagement = () => {
             dataIndex: 'name',
             key: 'name',
             ellipsis: true,
+            sorter: true,
+            sortOrder: orderBy === 'userName' && (orderDirection === 'asc' ? 'ascend' : 'descend'),
             width: 30,
-            ...getColumnSearchProps('name'),
             render: (text, record) => <Link to={`/dashboard/users/${record.key}/detail`}>{text}</Link>,
         },
         {
@@ -193,8 +148,9 @@ const UserManagement = () => {
             dataIndex: 'email',
             key: 'email',
             ellipsis: true,
+            sorter: true,
+            sortOrder: orderBy === 'email' && (orderDirection === 'asc' ? 'ascend' : 'descend'),
             width: 50,
-            ...getColumnSearchProps('email'),
             render: (text) => <a href={`mailto:${text}`}>{text}</a>,
         },
         {
@@ -216,21 +172,7 @@ const UserManagement = () => {
                     </Tag>
                 }
             },
-            filters: [
-                {
-                    text: 'Admin',
-                    value: 'Admin'
-                },
-                {
-                    text: 'Member',
-                    value: 'Member'
-                },
-                {
-                    text: 'Creator',
-                    value: 'Creator'
-                }
-            ],
-            onFilter: (value, record) => record.role.indexOf(value) === 0
+
         },
         {
             title: 'Balance',
@@ -238,7 +180,7 @@ const UserManagement = () => {
             key: 'wallet',
             align: 'center',
             width: 20,
-            sorter: (a, b) => a.wallet - b.wallet
+
         },
         {
             title: 'Action',
@@ -248,18 +190,50 @@ const UserManagement = () => {
             width: 20
         }
     ]
+    if (!currentUser) {
+        return <div>Loading...</div>
+    }
+    if (currentUser.role.toLowerCase() !== 'admin') {
+        return (
+            <Result
+                status="403"
+                title="403"
+                subTitle="Sorry, you are not authorized to access this page."
+                extra={
+                    <Button type="primary" onClick={() => navigate('/dashboard/main')}>
+                        Back to Dashboard
+                    </Button>
+                }
+            />
+        );
+    }
     return (
         <div>
-            <h2>User Management</h2>
+            <Breadcrumb items={breadcrumbItems} />
+            <Typography.Title level={3}>User Management</Typography.Title>
             <br />
+            <SearchUser searchUsers={searchUsers} />
             <Table
+                loading={loading}
                 dataSource={dataSource}
                 columns={column}
+                onChange={handleTableChange}
+                style={{ marginTop: '20px' }}
                 pagination={{
                     position: ['bottomCenter'],
-                    showQuickJumper: true,
+                    total: userData.total,
+                    pageSize: pageSize,
+                    current: page,
+                    onChange: (newPage, newPageSize) => {
+                        setSearchParams({
+                            keyword,
+                            page: newPage,
+                            pageSize: newPageSize,
+                        });
+                    },
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} users`
-                }}>
+                }}
+            >
 
             </Table>
         </div>
