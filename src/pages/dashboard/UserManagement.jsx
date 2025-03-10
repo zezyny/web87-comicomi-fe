@@ -66,6 +66,8 @@ const UserManagement = () => {
     };
 
     useEffect(() => {
+        console.log('abc123');
+
         fetchUsers()
         console.log(userData);
     }, [keyword, page, pageSize, deleteCounter, orderBy, orderDirection])
@@ -81,7 +83,19 @@ const UserManagement = () => {
         await userApi.deleteUser(id)
         message.success('User deleted successfully')
     }
-    const handleTableChange = (pagination, filters, sorter) => {
+    const handleTableChange = (pagination, filter, sorter) => {
+        let newPage = page
+        let newPageSize = pageSize
+        if (pagination) {
+            // setSearchParams({
+            //     page: pagination.current,
+            //     pageSize: pagination.pageSize
+            // });
+            newPage = pagination.current
+            newPageSize = pagination.pageSize
+        }
+
+
         if (sorter) {
             const fieldMapping = {
                 'name': 'userName',
@@ -91,16 +105,21 @@ const UserManagement = () => {
 
             const newOrderBy = fieldMapping[sorter.field] || 'createdAt';
             const newOrderDirection = sorter.order === 'ascend' ? 'asc' : 'desc';
+            console.log(newOrderBy, orderBy);
+            console.log(orderDirection, newOrderDirection);
+
 
             setOrderBy(newOrderBy);
             setOrderDirection(newOrderDirection);
             setSearchParams({
                 keyword,
-                page: 1,
-                pageSize,
+                page: newPage,
+                pageSize: newPageSize,
                 orderBy: newOrderBy,
                 orderDirection: newOrderDirection,
             });
+            console.log(searchParams);
+
         }
     };
     const dataSource = userData.users.map((user) => {
@@ -224,13 +243,6 @@ const UserManagement = () => {
                     total: userData.total,
                     pageSize: pageSize,
                     current: page,
-                    onChange: (newPage, newPageSize) => {
-                        setSearchParams({
-                            keyword,
-                            page: newPage,
-                            pageSize: newPageSize,
-                        });
-                    },
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} users`
                 }}
             >

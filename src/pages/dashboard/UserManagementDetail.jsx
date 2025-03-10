@@ -102,7 +102,7 @@ const UserManagementDetail = () => {
             <Typography.Title level={3}>{viewingUser?.userName}'s Profile</Typography.Title>
             <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', marginTop: '20px', marginBottom: '20px' }}>
                 <Flex>
-                    <Avatar src={viewingUser?.avatar} />
+                    {/* <Avatar src={viewingUser?.avatar} /> */}
                     <Descriptions items={descItems}>
 
                     </Descriptions>
