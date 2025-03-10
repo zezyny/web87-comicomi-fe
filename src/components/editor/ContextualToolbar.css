@@ -1,0 +1,30 @@
+.contextual-toolbar {
+    position: absolute; /* Positioned relative to the nearest positioned ancestor (Editor in this case, or body if none) */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 8px;
+    z-index: 110; /* Higher than sticky toolbar */
+}
+
+.contextual-toolbar button {
+    background: none;
+    border: none;
+    padding: 4px 6px;
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.contextual-toolbar button:hover, .contextual-toolbar button.is-active {
+    opacity: 1;
+    background-color: #f0f0f0;
+}
+
+.contextual-toolbar button svg {
+    vertical-align: middle;
+}

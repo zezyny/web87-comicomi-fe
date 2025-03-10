@@ -1,0 +1,29 @@
+.editor-toolbar {
+    background-color: #f0f0f0;
+    padding: 8px 15px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    gap: 10px;
+    position: sticky; /* Make it sticky */
+    top: 0;          /* Stick to the top of its containing block */
+    z-index: 100;     /* Ensure it's above editor content */
+}
+
+.editor-toolbar button {
+    background: none;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.editor-toolbar button:hover, .editor-toolbar button.is-active {
+    opacity: 1;
+    background-color: #e0e0e0;
+}
+
+.editor-toolbar button svg {
+    vertical-align: middle; /* Align icons nicely */
+}
