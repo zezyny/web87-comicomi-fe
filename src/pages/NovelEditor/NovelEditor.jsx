@@ -209,7 +209,7 @@ function NovelEditor() {
 
             <div className="DisplayGrid">
                 <div className="leftPanel">
-                    <h3>AI Support (Placeholder)</h3>
+                    <h3>AI Support (Not Available)</h3>
                     <textarea
                         placeholder="Enter prompt for AI assistance..."
                         style={{ width: '100%', height: '150px', marginBottom: '10px' }}
