@@ -18,9 +18,9 @@ createRoot(document.getElementById('root')).render(
           },
           components: {
             Breadcrumb: {
-              itemColor: '#a7b5e7',
-              lastItemColor: '#f3f8ff',
-              separatorColor: '#a7b5e7'
+              itemColor: '#317def',
+              lastItemColor: '#445489',
+              separatorColor: '#aaa'
             }
           }
         }}

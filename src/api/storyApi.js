@@ -15,7 +15,7 @@ const storyApi = {
         return response.data
     },
     getStory: async (id) => {
-        const trueUrl = storyUrl.getStory.replace("id", id)
+        const trueUrl = storyUrl.getStory.replace(":id", id)
         const response = await axios.get(trueUrl)
         return response.data
     }
