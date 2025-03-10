@@ -175,7 +175,7 @@ const StoriesManager = () => {
             key: 'actions',
             render: (_, record) => (
                 <>
-                    <Button icon={<TfiPencil />} type="link" onClick={() => { /* TODO: Implement Edit */ }} disabled={userRole !== 'admin' && userRole !== 'creator'}>Edit</Button>
+                    <Button icon={<TfiPencil />} type="link" onClick={() => { navigate(`/dashboard/stories/${record._id}/detail`) }} disabled={userRole !== 'admin' && userRole !== 'creator'}>Edit</Button>
                     <Button
                         icon={<TfiTrash />}
                         type="link"

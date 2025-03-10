@@ -10,6 +10,8 @@ import AuthForm from './pages/development/DevUseLoginRegister'
 import UserManagementDetail from './pages/dashboard/UserManagementDetail'
 import ComicEditor from './pages/ComicEditor/ComicEditor'
 import NovelEditor from './pages/NovelEditor/NovelEditor'
+// import ChapterManagement from ''
+import ChapterManagement from './pages/dashboard/ChapterManagement'
 
 function App() {
 
@@ -25,6 +27,7 @@ function App() {
           <Route path='/dashboard/users' element={<UserManagement />} />
           <Route path='/dashboard/stories' element={<StoriesManager />} />
           <Route path='/dashboard/users/:id/detail' element={<UserManagementDetail />} />
+          <Route path='/dashboard/stories/:storyId/detail' element={<ChapterManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>
