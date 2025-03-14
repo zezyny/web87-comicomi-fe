@@ -10,6 +10,8 @@ import { FaBold, FaItalic, FaUnderline, FaCode, FaHeading, FaQuoteLeft, FaLink, 
 import {useNavigate, useParams } from 'react-router-dom'
 import storyApi from '../../api/storyApi';
 import chapterApi from '../dashboard/chapterapi';
+import { permissionControl } from '../../security/permissionController';
+import { useCookies } from 'react-cookie';
 
 const EditorToolBar = () => {
     const { editor } = useCurrentEditor();
@@ -131,9 +133,10 @@ function NovelEditor() {
     const [editor, setEditor] = useState(null);
     const [editorContentHTML, setEditorContentHTML] = useState('');
     const {chapterId} = useParams()
-
     const [storyData, setStoryData] = useState({})
     const [chapterData, setChapterData] = useState({})
+    const [cookies] = useCookies(['accessToken']);
+    
 
     const loadMetadata = async () => {
         
@@ -145,7 +148,18 @@ function NovelEditor() {
         setChapterData(_chapterData.data)
     } 
     
+    const auth = async () =>{
+        const isPermissionValid = await permissionControl.checkAllowAdminOrCreator(cookies.accessToken)
+        if(! isPermissionValid){
+            // permissionControl.kick()
+            console.log("Permission error.")
+        }else{
+            console.log("Permission to access is confirmed.")
+        }
+    }
+
     useEffect(()=>{
+        auth()
         loadMetadata()
     },[])
     
