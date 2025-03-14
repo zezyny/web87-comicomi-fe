@@ -12,6 +12,7 @@ import ComicEditor from './pages/ComicEditor/ComicEditor'
 import NovelEditor from './pages/NovelEditor/NovelEditor'
 // import ChapterManagement from ''
 import ChapterManagement from './pages/dashboard/ChapterManagement'
+import EditorPortal from './pages/portals/editorPortal'
 
 function App() {
 
@@ -20,8 +21,9 @@ function App() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<AuthForm/>}/>
-        <Route path='/editor/comic' element={<ComicEditor />}/>
-        <Route path='/editor/novel' element={<NovelEditor />}/>
+        <Route path='/editor/comic/:chapterId' element={<ComicEditor />}/>
+        <Route path='/editor/novel/:chapterId' element={<NovelEditor />}/>
+        <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />}/>
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='/dashboard/main' element={<Dashboard />} />
           <Route path='/dashboard/users' element={<UserManagement />} />

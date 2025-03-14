@@ -26,6 +26,8 @@ const ChapterManagement = () => {
     const accessToken = cookies.accessToken;
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
     const [createForm] = Form.useForm();
+    const [storyType, setStoryType] = useState('')
+    const [storyDesc, setStoryDesc] = useState('')
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -164,6 +166,9 @@ const ChapterManagement = () => {
         try {
             const response = await chapterApi.getStoryDetail(storyId, accessToken);
             setStoryTitle(response.data.title);
+            setStoryType(response.data.type)
+            setStoryDesc(response.data.description)
+            console.log(response.data.title, response.data.type)
         } catch (error) {
             console.error("Error fetching story details:", error);
             if (error.response && error.response.status === 404) {
@@ -244,7 +249,7 @@ const ChapterManagement = () => {
 
     const handleCreateSubmit = async (values) => {
         try {
-            await chapterApi.createChapter({ ...values, storyId: storyId }, accessToken);
+            await chapterApi.createChapter({ ...values, storyId: storyId, type: storyType}, accessToken);
             message.success("Chapter created successfully.");
             setIsCreateModalVisible(false);
             createForm.resetFields();
@@ -267,7 +272,7 @@ const ChapterManagement = () => {
             ellipsis: true,
             width: 100,
             ...getColumnSearchProps('chapterTitle'),
-            render: (text, record) => <Link to={`/dashboard/stories/${storyId}/chapters/${record.key}`}>{text}</Link>,
+            render: (text, record) => <Link to={`/editor/portal/${storyId}/chapter/${record.key}`}>{text}</Link>,
         },
         {
             title: 'Chapter No.',
@@ -346,6 +351,9 @@ const ChapterManagement = () => {
                     </Button>
                 </div>
             </Space>
+            <Space style={{ justifyContent: 'space-between', display: 'flex', width: '100%', marginBottom: 16 }}>
+            <p>{storyDesc?storyDesc:"Loading description..."}</p>            
+            </Space>
 
             <Table
                 dataSource={dataSource}
@@ -393,16 +401,6 @@ const ChapterManagement = () => {
                             <Option value="Free">Free</Option>
                             <Option value="Ads">Ads</Option>
                             <Option value="Paid">Paid</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="type"
-                        label="Type"
-                        rules={[{ required: true, message: 'Please select type!' }]}
-                    >
-                        <Select>
-                            <Option value="comic">Comic</Option>
-                            <Option value="novel">Novel</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

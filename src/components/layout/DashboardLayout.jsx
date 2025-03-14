@@ -26,6 +26,9 @@ const DashboardLayout = () => {
     const [currentUser, setCurrentUser] = useState(null)
     const fetchCurrentUser = async (id) => {
         const response = await userApi.getUser(id)
+        if(response.data.role != "admin" || response.data.role != "creator"){
+            navigate('/login');
+        }
         setCurrentUser(response.data)
     }
 

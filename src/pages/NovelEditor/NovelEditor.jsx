@@ -7,6 +7,9 @@ import Header from '../../components/commons/header';
 import ContextualToolbar from '../../components/editor/ContextualToolbar';
 import "./NovelEditor.css";
 import { FaBold, FaItalic, FaUnderline, FaCode, FaHeading, FaQuoteLeft, FaLink, FaImage, FaListUl, FaListOl } from 'react-icons/fa';
+import {useNavigate, useParams } from 'react-router-dom'
+import storyApi from '../../api/storyApi';
+import chapterApi from '../dashboard/chapterapi';
 
 const EditorToolBar = () => {
     const { editor } = useCurrentEditor();
@@ -127,6 +130,26 @@ const EditorToolBar = () => {
 function NovelEditor() {
     const [editor, setEditor] = useState(null);
     const [editorContentHTML, setEditorContentHTML] = useState('');
+    const {chapterId} = useParams()
+
+    const [storyData, setStoryData] = useState({})
+    const [chapterData, setChapterData] = useState({})
+
+    const loadMetadata = async () => {
+        
+        let _chapterData = await chapterApi.getChapterDetail(chapterId)
+        console.log(_chapterData)
+        let StoryData = await storyApi.getStory(_chapterData.data.storyId)
+        console.log(StoryData)
+        setStoryData(StoryData)
+        setChapterData(_chapterData.data)
+    } 
+    
+    useEffect(()=>{
+        loadMetadata()
+    },[])
+    
+    console.log(`Editing: ${chapterId}`)
 
     const extensions = [
         StarterKit,
@@ -203,7 +226,7 @@ function NovelEditor() {
     return (
 
         <div className="NovelEditor">
-            <Header pageTitle="Novel Editor (BETA)" />
+            <Header pageTitle="Novel Editor (Basic)" />
 
             <ContextualToolbar editor={editor} />
 
@@ -240,12 +263,24 @@ function NovelEditor() {
 
                 </div>
                 <div className="rightPanel">
-                    <h3>Right Panel (Placeholder)</h3>
-                    <div>
-                        <p>Preview Area (Future Feature)</p>
-                        <p>Character Notes (Future Feature)</p>
-                        <p>World Setting (Future Feature)</p>
+                    <h3>Metadata</h3>
+                    <div className="novelStatusZone">
+                        <p>Story name: {storyData.title?storyData.title:"Loading..."}</p>
+                        <p>Chapter name: {chapterData.chapterTitle?chapterData.chapterTitle:"Loading..."}</p>
+                        <p>Chapter index: {chapterData.chapterNumber?chapterData.chapterNumber:"Loading..."}</p>
+                        <p>Created at: Processing...</p>
+                        <p>Published: {chapterData.released ? "Yes": "No"}</p>
+                        
                     </div>
+                    <div className="button2grid">
+                        <button>
+                            Save
+                        </button>
+                        <button>
+                            Publish
+                        </button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
