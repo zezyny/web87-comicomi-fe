@@ -6,6 +6,7 @@ const authUrl = {
     checkAdmin: baseUrl + '/admin',
     checkCreator: baseUrl + '/creator',
     checkAdminOrCreator: baseUrl + '/adminorcreator',
+    checkAcessStoryEdit: baseUrl + '/editor/haveaccess/:chapterId',
 };
 
 export const permissionControl = {
@@ -46,6 +47,15 @@ export const permissionControl = {
         } catch (error) {
             console.error("Error checking admin or creator permission:", error);
             return false;
+        }
+    },
+    checkAcessToEditStory: async(accessToken, chapterId) => {
+        try{
+            const response = await axios.get(authUrl.checkAcessStoryEdit.replace(':chapterId', chapterId), {headers:{"Authorization": `Bearer ${accessToken}`}})
+            return response.status == 200
+        } catch(error){
+            console.log("Error: You don't have access to edit this content. Error MSG", error)
+            return false
         }
     },
     kick: (navigate) => {

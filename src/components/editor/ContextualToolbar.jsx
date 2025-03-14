@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaBold, FaItalic, FaLink } from 'react-icons/fa';
-
+import {useCurrentEditor} from '@tiptap/react'
 import './ContextualToolbar.css';
 
-const ContextualToolbar = ({ editor }) => {
+const ContextualToolbar = () => {
+    const { editor } = useCurrentEditor();
     const [position, setPosition] = useState(null);
     const toolbarRef = useRef(null);
 
@@ -12,7 +13,7 @@ const ContextualToolbar = ({ editor }) => {
 
         const handleSelectionChange = () => {
             if (editor.isDestroyed) return;
-
+            // console.log("Uhh changed smth")
             const { state } = editor.view;
             const { from, to, empty } = state.selection;
 
@@ -55,23 +56,22 @@ const ContextualToolbar = ({ editor }) => {
             }}
         >
             <button
-                onClick={() => editor.chain.focus().toggleBold().run()}
+                onClick={(e) => {e.preventDefault();editor.chain().focus().toggleBold().run(); console.log("bold updated from contextual toolbar.")}}
                 className={editor.isActive('bold') ? 'is-active' : ''}
-                title="Bold" // Added title for accessibility
+                title="Bold" 
             >
                 <FaBold />
             </button>
             <button
-                onClick={() => editor.chain.focus().toggleItalic().run()}
+                onClick={() => editor.chain().focus().toggleItalic().run()}
                 className={editor.isActive('italic') ? 'is-active' : ''}
-                title="Italic" // Added title for accessibility
+                title="Italic" 
             >
                 <FaItalic />
             </button>
-            <button onClick={() => { /* Implement Link functionality here */ alert('Link feature in contextual toolbar to be implemented'); }} title="Link">
+            <button onClick={() => { alert('Link feature in contextual toolbar to be implemented'); }} title="Link">
                 <FaLink />
             </button>
-            {/* Add more buttons as needed for contextual formatting */}
         </div>
     );
 };

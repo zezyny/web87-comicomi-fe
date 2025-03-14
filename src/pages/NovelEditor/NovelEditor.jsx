@@ -7,11 +7,12 @@ import Header from '../../components/commons/header';
 import ContextualToolbar from '../../components/editor/ContextualToolbar';
 import "./NovelEditor.css";
 import { FaBold, FaItalic, FaUnderline, FaCode, FaHeading, FaQuoteLeft, FaLink, FaImage, FaListUl, FaListOl } from 'react-icons/fa';
-import {useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import storyApi from '../../api/storyApi';
 import chapterApi from '../dashboard/chapterapi';
-import { permissionControl } from '../../security/permissionController';
+import { permissionControl} from '../../security/permissionController';
 import { useCookies } from 'react-cookie';
+// import 
 
 const EditorToolBar = () => {
     const { editor } = useCurrentEditor();
@@ -130,40 +131,41 @@ const EditorToolBar = () => {
 }
 
 function NovelEditor() {
-    const [editor, setEditor] = useState(null);
+    const [Editor, setEditor] = useState(null);
     const [editorContentHTML, setEditorContentHTML] = useState('');
-    const {chapterId} = useParams()
+    const { chapterId } = useParams()
     const [storyData, setStoryData] = useState({})
     const [chapterData, setChapterData] = useState({})
     const [cookies] = useCookies(['accessToken']);
-    
+    const [needSave, setNeedSave] = useState(false)
 
     const loadMetadata = async () => {
-        
+
         let _chapterData = await chapterApi.getChapterDetail(chapterId)
         console.log(_chapterData)
         let StoryData = await storyApi.getStory(_chapterData.data.storyId)
         console.log(StoryData)
         setStoryData(StoryData)
         setChapterData(_chapterData.data)
-    } 
-    
-    const auth = async () =>{
-        const isPermissionValid = await permissionControl.checkAllowAdminOrCreator(cookies.accessToken)
-        if(! isPermissionValid){
-            // permissionControl.kick()
+    }
+
+    const auth = async () => {
+        const isPermissionValid = await permissionControl.checkAcessToEditStory(cookies.accessToken, chapterId)
+        if (!isPermissionValid) {
             console.log("Permission error.")
-        }else{
+            alert("Permission error.")
+            // permissionControl.kick()
+        } else {
             console.log("Permission to access is confirmed.")
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         auth()
         loadMetadata()
-    },[])
-    
-    console.log(`Editing: ${chapterId}`)
+    }, [])
+
+    // console.log(`Editing: ${chapterId}`)
 
     const extensions = [
         StarterKit,
@@ -176,6 +178,12 @@ function NovelEditor() {
 
     const handleEditorUpdate = useCallback(({ editor }) => {
         setEditorContentHTML(editor.getHTML());
+        if(Editor == null){
+            setEditor(editor)
+            console.log("Quick fix performed for editor")
+        }
+        console.log("Updated content")
+        setNeedSave(true)
     }, []);
 
     const handleKeyDown = useCallback((view, event) => {
@@ -188,9 +196,9 @@ function NovelEditor() {
     }, []);
 
     const getHeadings = useCallback(() => {
-        if (!editor) return [];
+        if (!Editor) return [];
         const headings = [];
-        const doc = editor.view.dom;
+        const doc = Editor.view.dom;
         doc.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((heading) => {
             headings.push({
                 id: heading.id || heading.textContent.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, ''),
@@ -198,7 +206,7 @@ function NovelEditor() {
             });
         });
         return headings;
-    }, [editor]);
+    }, [Editor]);
 
     const handleInternalLink = useCallback(() => {
         const headings = getHeadings();
@@ -215,7 +223,7 @@ function NovelEditor() {
         if (selectedHeadingId) {
             editor.chain().focus().toggleLink({ href: `#${selectedHeadingId}` }).run();
         }
-    }, [editor, getHeadings]);
+    }, [Editor, getHeadings]);
 
     const handleImageUpload = useCallback(() => {
         const input = document.createElement('input');
@@ -235,14 +243,30 @@ function NovelEditor() {
             }
         };
         input.click();
-    }, [editor]);
+    }, [Editor]);
+    const save = () => {
 
+        alert("Saving")
+        setNeedSave(false)
+        console.log("Data:")
+        // console.log()
+        chapterApi.saveChapter(chapterId, Editor.getHTML(), cookies.accessToken)
+    }
+    const publish = () => {
+        if (needSave) {
+            let _save = confirm("Changes not saved, do you want so save it first?")
+            if (_save) {
+                save()
+            }
+        }
+        alert("Upload implementation here")
+    }
     return (
 
         <div className="NovelEditor">
             <Header pageTitle="Novel Editor (Basic)" />
 
-            <ContextualToolbar editor={editor} />
+            <ContextualToolbar />
 
             <div className="DisplayGrid">
                 <div className="leftPanel">
@@ -264,11 +288,11 @@ function NovelEditor() {
                             extensions={extensions}
                             onUpdate={handleEditorUpdate}
                             editorProps={{ handleKeyDown }}
-                            onInit={({ editor }) => setEditor(editor)}
+                            onInit={({ editor }) => {setEditor(editor); console.log("Loaded editor")}}
                             slotBefore={
                                 <EditorToolBar />
                             }
-                            
+
                         >
 
                         </EditorProvider>
@@ -279,22 +303,22 @@ function NovelEditor() {
                 <div className="rightPanel">
                     <h3>Metadata</h3>
                     <div className="novelStatusZone">
-                        <p>Story name: {storyData.title?storyData.title:"Loading..."}</p>
-                        <p>Chapter name: {chapterData.chapterTitle?chapterData.chapterTitle:"Loading..."}</p>
-                        <p>Chapter index: {chapterData.chapterNumber?chapterData.chapterNumber:"Loading..."}</p>
+                        <p>Story name: {storyData.title ? storyData.title : "Loading..."}</p>
+                        <p>Chapter name: {chapterData.chapterTitle ? chapterData.chapterTitle : "Loading..."}</p>
+                        <p>Chapter index: {chapterData.chapterNumber ? chapterData.chapterNumber : "Loading..."}</p>
                         <p>Created at: Processing...</p>
-                        <p>Published: {chapterData.released ? "Yes": "No"}</p>
-                        
+                        <p>Published: {chapterData.released ? "Yes" : "No"}</p>
+
                     </div>
                     <div className="button2grid">
-                        <button>
+                        <button onClick={() => { save() }}>
                             Save
                         </button>
-                        <button>
+                        <button onClick={() => { publish() }}>
                             Publish
                         </button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
