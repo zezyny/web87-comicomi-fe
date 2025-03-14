@@ -13,27 +13,35 @@ const ContextualToolbar = () => {
 
         const handleSelectionChange = () => {
             if (editor.isDestroyed) return;
-            // console.log("Uhh changed smth")
+            console.log("handleSelectionChange called");
             const { state } = editor.view;
             const { from, to, empty } = state.selection;
+            console.log("Selection:", { from, to, empty });
 
             if (empty || from === to) {
                 setPosition(null);
+                console.log("setPosition(null) - empty selection");
                 return;
             }
 
             const startCoords = editor.view.coordsAtPos(from);
             const endCoords = editor.view.coordsAtPos(to);
+            console.log("Coords:", { startCoords, endCoords });
 
             const toolbarHeight = toolbarRef.current?.offsetHeight || 0;
             const top = startCoords.top - toolbarHeight - 5;
             const left = (startCoords.left + endCoords.right) / 2;
+            console.log("Position:", { top, left });
 
             setPosition({ top, left });
+            console.log("setPosition({top, left}) - position set");
         };
 
         editor.on('selectionUpdate', handleSelectionChange);
-        editor.on('blur', () => setPosition(null));
+        editor.on('blur', () => {
+            setPosition(null);
+            console.log("setPosition(null) - blur event");
+        });
 
         return () => {
             editor.off('selectionUpdate', handleSelectionChange);
@@ -42,6 +50,7 @@ const ContextualToolbar = () => {
     }, [editor]);
 
     if (!editor || !position) {
+        console.log("Toolbar not rendered - editor:", !!editor, "position:", position);
         return null;
     }
 
@@ -50,22 +59,22 @@ const ContextualToolbar = () => {
             ref={toolbarRef}
             className="contextual-toolbar"
             style={{
-                top: `${position.top}px`,
-                left: `${position.left}px`,
+                top: `${position?.top}px`,
+                left: `${position?.left}px`,
                 transform: 'translateX(-50%)',
             }}
         >
             <button
                 onClick={(e) => {e.preventDefault();editor.chain().focus().toggleBold().run(); console.log("bold updated from contextual toolbar.")}}
                 className={editor.isActive('bold') ? 'is-active' : ''}
-                title="Bold" 
+                title="Bold"
             >
                 <FaBold />
             </button>
             <button
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 className={editor.isActive('italic') ? 'is-active' : ''}
-                title="Italic" 
+                title="Italic"
             >
                 <FaItalic />
             </button>

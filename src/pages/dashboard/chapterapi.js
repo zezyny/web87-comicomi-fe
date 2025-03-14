@@ -10,7 +10,10 @@ const chapterUrl = {
     getChapterDetail: baseUrl + '/chapters/:chapterId',
     getChapterContent: baseUrl + '/chapter/:chapterId/contents',
     getStoryDetail: baseUrl + '/v2/stories/:storyId',
-    saveChapter: baseUrl + '/chapter/save-content/:chapterId'
+    saveChapterNovel: baseUrl + '/chapter/save-content/novel/:chapterId',
+    publishChapter: baseUrl + '/chapter/publish/:chapterId',
+    loadCommonContent: baseUrl + '/chapter/contents/:chapterId',
+    loadAdvancedContent: baseUrl + '/chapter/contents/:chapterId/private',
 };
 
 const chapterApi = {
@@ -63,9 +66,30 @@ const chapterApi = {
         });
         return response;
     },
-    saveChapter: async (chapterId, chapterContent, authToken) => {
-        const trueUrl = chapterUrl.saveChapter.replace(':chapterId', chapterId);
+    saveChapterNovel: async (chapterId, chapterContent, authToken) => {
+        const trueUrl = chapterUrl.saveChapterNovel.replace(':chapterId', chapterId);
         const response = await axios.post(trueUrl, {contents: chapterContent}, {
+            headers: authToken ? { 'Authorization': `Bearer ${authToken}`} : {}
+        });
+        return response;
+    },
+    publishChapter: async (chapterId, authToken) => {
+        const trueUrl = chapterUrl.publishChapter.replace(':chapterId', chapterId);
+        const response = await axios.get(trueUrl, {
+            headers: authToken ? { 'Authorization': `Bearer ${authToken}`} : {}
+        });
+        return response;
+    },
+    loadCommonContent: async(chapterId, authToken) => {
+        const trueUrl = chapterUrl.loadCommonContent.replace(':chapterId', chapterId);
+        const response = await axios.get(trueUrl, {
+            headers: authToken ? { 'Authorization': `Bearer ${authToken}`} : {}
+        });
+        return response;
+    },
+    loadPrivateContent: async(chapterId, authToken) => {
+        const trueUrl = chapterUrl.loadAdvancedContent.replace(':chapterId', chapterId);
+        const response = await axios.get(trueUrl, {
             headers: authToken ? { 'Authorization': `Bearer ${authToken}`} : {}
         });
         return response;

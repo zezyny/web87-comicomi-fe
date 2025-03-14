@@ -26,17 +26,23 @@ const DashboardLayout = () => {
     const [cookies] = useCookies(['accessToken', 'userRole', 'userId', 'refreshToken']);
     const [currentUser, setCurrentUser] = useState(null)
     const fetchCurrentUser = async (id) => {
-        const response = await userApi.getUser(id)
-        console.log(response.data)
-        if(response.data.role != "admin" && response.data.role != "creator"){
-            navigate('/login');
-        }
-        console.log("Access token extracted: ",cookies.accessToken)
-        const permissionAccess = await permissionControl.checkAllowAdminOrCreator(cookies.accessToken)
-        if(!permissionAccess){
+        try{
+            const response = await userApi.getUser(id)
+            console.log(response.data)
+            if(response.data.role != "admin" && response.data.role != "creator"){
+                navigate('/login');
+            }
+            console.log("Access token extracted: ",cookies.accessToken)
+            const permissionAccess = await permissionControl.checkAllowAdminOrCreator(cookies.accessToken)
+            if(!permissionAccess){
+                permissionControl.kick(navigate)
+            }
+            setCurrentUser(response.data)
+        }catch(e){
+            alert("There's error when trying to perform authentication for you.")
             permissionControl.kick(navigate)
         }
-        setCurrentUser(response.data)
+        
     }
 
     useEffect(() => {

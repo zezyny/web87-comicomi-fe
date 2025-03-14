@@ -28,6 +28,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
+    flex-wrap: wrap;
 }
 
 .editor-toolbar button {
