@@ -3,8 +3,11 @@ import "./ComicEditor.css"
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDrag, useDrop } from 'react-dnd';
-
+import chapterApi from '../dashboard/chapterapi';
 import Header from '../../components/commons/header'
+import { useCookies } from 'react-cookie';
+import { useParams } from 'react-router-dom';
+import {Buffer} from 'buffer';
 
 const ItemTypes = {
   IMAGE: 'image',
@@ -52,7 +55,7 @@ const DraggableImage = ({ id, url }) => {
 };
 
 // Draggable Component Box
-const DraggableComponent = ({ name, type }) => {
+const DraggableComponent = ({name, type }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.COMPONENT,
     item: () => {
@@ -176,16 +179,87 @@ const ContentItem = ({ item, index, moveContentItem }) => {
 };
 
 function ComicEditor() {
+  const { chapterId } = useParams()
   const [uploadedImages, setUploadedImages] = useState([]);
   const [contentItems, setContentItems] = useState([]);
   const [isAutoAddModalOpen, setIsAutoAddModalOpen] = useState(false);
   const [autoAddImages, setAutoAddImages] = useState([]);
   const [isTrashHovering, setIsTrashHovering] = useState(false);
   const [activeView, setActiveView] = useState("mobile_view");
+  const [chapterData, setChapterData] = useState({})
+  const [cookie] = useCookies(['accessToken'])
+  const [saveButtonText, setSaveButtonText] = useState('Save');
+  const [publishButtonText, setPublishButtonText] = useState('Publish'); 
+  const [requireSave, setRequireSave] = useState(false);
+
   // const [scrollDown, setScrollDown]
   const viewportRef = useRef(null);
 
+  const uploadContentToServer = async () => {
+    if (!requireSave) {
+      alert("Nothing to save.");
+      return;
+    }
+  
+    try {
+      let imageUploader = new FormData();
+      console.log(uploadedImages);
+  
+      if (contentItems && contentItems.length > 0) {
+        contentItems.forEach((e, ind) => {
+          console.log("Prepare:", e.id);
+  
+          let imageBuffer = Buffer.from(e.url.split(",")[1], "base64");
+          let imageType = e.url.substring(e.url.indexOf("/") + 1, e.url.indexOf(";"));
+          let fileName = `${e.id}.${imageType}`;
+  
+          let imageBlob = new Blob([imageBuffer], { type: `image/${imageType}` });
+          console.log("Image name:", fileName);
+  
+          imageUploader.append(`image${ind}`, imageBlob, fileName);
+        });
+  
+        console.log(imageUploader);
+  
+        const response = await chapterApi.saveComicImage(chapterId, cookie.accessToken, imageUploader);
+        console.log(response);
+        if(response.status == 200){
+          setRequireSave(false)
+          setSaveButtonText("Saved!")
+        }else{
+          setSaveButtonText("Error!")
+        }
+        setTimeout(()=>{
+          setSaveButtonText("Save")
+        }, 3000)
 
+      } else {
+        console.error("contentItems is empty or undefined.");
+      }
+    } catch (err) {
+      console.error("Error uploading files:", err);
+    }
+  };
+  
+
+  const loadMetadata = async () => {
+    // console.log("Got access token:", cookie.accessToken)
+    const response = await chapterApi.getChapterDetail(chapterId, cookie.accessToken)
+    console.log(response)
+    setChapterData(response.data);
+  }
+  useEffect(()=>{
+    console.log(contentItems)
+    if(!requireSave && contentItems.length != 0)
+    {
+      setRequireSave(true)
+      console.log("Save enable")
+    }
+  }, 
+  [contentItems])
+  useEffect(() => {
+    loadMetadata()
+  }, [])
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     const newImages = [];
@@ -253,7 +327,7 @@ function ComicEditor() {
     const newImages = await Promise.all(
       autoAddImages.map(file => new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onloadend = () => resolve({ url: reader.result, id: Date.now() });
+        reader.onloadend = () => resolve({ url: reader.result, id: Date.now() +  Math.round(9999 * Math.random()) });
         reader.readAsDataURL(file);
       }))
     );
@@ -450,7 +524,9 @@ function ComicEditor() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="pageContainer">
-        <Header pageTitle="Comic Editor tool (BETA)."/>
+        <Header pageTitle="Comic Editor tool (BETA).">
+          {chapterData.chapterTitle ? chapterData.chapterTitle + (requireSave ? " (unsaved)" : " (saved)") : "Loading..."}
+        </Header>
         <div className='ComicEditorContainer'>
           <div className="ComponentBar HoverContainer">
             <div className="file-upload-section">
@@ -482,13 +558,16 @@ function ComicEditor() {
 
           <div className="Properties HoverContainer">
             <div className="ComponentViews">
-              <DraggableComponent name="Ads" type={ItemTypes.COMPONENT_ADS} />
-              <DraggableComponent name="Seperator" type={ItemTypes.COMPONENT_SEP} />
-              <DraggableComponent name="Spacing" type={ItemTypes.COMPONENT_SPACING} />
-
+              {/* <DraggableComponent disabled name="Ads" type={ItemTypes.COMPONENT_ADS} />
+              <DraggableComponent disabled name="Seperator" type={ItemTypes.COMPONENT_SEP} />
+              <DraggableComponent disabled name="Spacing" type={ItemTypes.COMPONENT_SPACING} /> */}
+              <p>Component not supported in this version.</p>
             </div>
+            <p>Publish status: {chapterData.relased ? "yes" : "no"}</p>
             <div className="ProceedButton">
-              <button>Proceed</button>
+              <button onClick={()=>{uploadContentToServer()}}>  {saveButtonText}</button>
+
+              <button>  {publishButtonText}</button>
             </div>
           </div>
         </div>
