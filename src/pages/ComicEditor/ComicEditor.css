@@ -295,12 +295,15 @@
     padding: 20px 0;
     text-align: center;
     margin-top: auto;
+    gap: 5px;
 }
+
 
 .ProceedButton button {
     background-color: var(--accent-color);
     color: white;
     border-color: var(--accent-color);
+    margin-top: 5px;
 }
 .ProceedButton button:hover {
     background-color: #0056b3;

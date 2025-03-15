@@ -14,6 +14,7 @@ const chapterUrl = {
     publishChapter: baseUrl + '/chapter/publish/:chapterId',
     loadCommonContent: baseUrl + '/chapter/contents/:chapterId',
     loadAdvancedContent: baseUrl + '/chapter/contents/:chapterId/private',
+    uploadImageContent: baseUrl + '/chapter/save-content/comic/:chapterId',
 };
 
 const chapterApi = {
@@ -93,6 +94,16 @@ const chapterApi = {
             headers: authToken ? { 'Authorization': `Bearer ${authToken}`} : {}
         });
         return response;
+    },
+    saveComicImage: async(chapterId, authToken, formData) => {
+        const trueUrl = chapterUrl.uploadImageContent.replace(':chapterId', chapterId);
+        const response = await axios.post(trueUrl,
+            formData,
+            {
+                headers: authToken ? { 'Authorization': `Bearer ${authToken}`, "Content-Type": "multipart/form-data"} : {}
+            }
+        )
+        return response
     }
 };
 
