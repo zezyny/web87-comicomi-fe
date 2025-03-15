@@ -13,6 +13,7 @@ import NovelEditor from './pages/NovelEditor/NovelEditor'
 // import ChapterManagement from ''
 import ChapterManagement from './pages/dashboard/ChapterManagement'
 import EditorPortal from './pages/portals/editorPortal'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 function App() {
 
