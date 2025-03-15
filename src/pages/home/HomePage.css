@@ -1,0 +1,155 @@
+.home-mobile {
+    background-color: #121212;
+    color: #fff;
+    font-family: sans-serif;
+    padding-bottom: 60px; 
+    min-height: 100vh; 
+  }
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .welcome-message h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .welcome-message p {
+    margin: 0;
+    font-size: 12px;
+    color: #ccc;
+  }
+  
+  .search-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .genre-section {
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+  
+  .genre-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .genre-list button {
+    background-color: #222;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .genre-list button.active {
+    background-color: #bb86fc; 
+  }
+  
+  .content-section {
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+  
+  .content-list {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 10px; 
+    gap: 15px;
+  }
+  
+  .content-card {
+    width: 150px;
+    flex-shrink: 0; 
+    background-color: #222;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .content-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+  
+  .card-info {
+    padding: 10px;
+  }
+  
+  .card-info h5 {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .card-info p {
+    margin: 5px 0;
+    font-size: 12px;
+    color: #ccc;
+  }
+  
+  .rating {
+    font-size: 12px;
+    color: #ffc107; 
+  }
+  
+  .rating i {
+    margin-right: 3px;
+  }
+  
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #222;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  .nav-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .nav-button.active {
+    color: #bb86fc;
+  }
+  
+  .notification-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+  }
