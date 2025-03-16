@@ -241,6 +241,14 @@ function ComicEditor() {
     }
   };
   
+  const publishContent = async () =>{
+    try{
+      await chapterApi.publishChapter(chapterId, cookie.accessToken)
+      await loadMetadata()
+    }catch(err){
+      alert("There's an error while publish your comic. Try again later.")
+    }
+  }
 
   const loadMetadata = async () => {
     // console.log("Got access token:", cookie.accessToken)
@@ -563,11 +571,11 @@ function ComicEditor() {
               <DraggableComponent disabled name="Spacing" type={ItemTypes.COMPONENT_SPACING} /> */}
               <p>Component not supported in this version.</p>
             </div>
-            <p>Publish status: {chapterData.relased ? "yes" : "no"}</p>
+            <p>Publish status: {chapterData.released ? "yes" : "no"}</p>
             <div className="ProceedButton">
               <button onClick={()=>{uploadContentToServer()}}>  {saveButtonText}</button>
 
-              <button>  {publishButtonText}</button>
+              <button onClick={()=>{publishContent()}}>  {publishButtonText}</button>
             </div>
           </div>
         </div>

@@ -1,0 +1,42 @@
+.dropup {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    width: fit-content;
+}
+
+.dropup-toggle {
+    height: 100%;
+    min-width: 10rem;
+    width: fit-content;
+    padding: 0.25rem;
+    cursor: pointer;
+    background-color: white;
+}
+
+.dropup-menu {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.dropup-menu.show {
+    display: block;
+}
+
+.dropup-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropup-item:hover {
+    background-color: #f0f0f0;
+}
