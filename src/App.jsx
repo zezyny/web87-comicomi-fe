@@ -13,6 +13,7 @@ import NovelEditor from './pages/NovelEditor/NovelEditor'
 // import ChapterManagement from ''
 import ChapterManagement from './pages/dashboard/ChapterManagement'
 import EditorPortal from './pages/portals/editorPortal'
+import UniversalReader from './pages/reader/universalReader'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import Revenue from './pages/dashboard/Revenue'
 
@@ -22,6 +23,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomePage />} />
+        <Route path='/login' element={<AuthForm/>}/>
+        <Route path='/editor/comic/:chapterId' element={<ComicEditor />}/>
+        <Route path='/editor/novel/:chapterId' element={<NovelEditor />}/>
+        <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />}/>
+        <Route path='/reader/:storyId/chapter/:chapterId' element={<UniversalReader />}/>
+        <Route path='/dashboard' element={<DashboardLayout />}>
+        <Route path='/dashboard/main' element={<Dashboard />} />
         <Route path='/login' element={<AuthForm />} />
         <Route path='/editor/comic/:chapterId' element={<ComicEditor />} />
         <Route path='/editor/novel/:chapterId' element={<NovelEditor />} />

@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { Button, Table, Modal, Form, Input, Select, message, Spin, Result } from 'antd';
+import { Button, Table, Modal, Form, Input, Select, message, Spin, Result, Upload } from 'antd';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { TfiPencil, TfiTrash } from "react-icons/tfi";
 import { useNavigate } from 'react-router-dom';
+import { FaUpload } from 'react-icons/fa';
 
 import '../../components/commons/header.css' // Updated CSS import
 import './StoryManager.css' // Updated CSS import
 
 const API_BASE_URL = 'http://localhost:8080/api/v2/stories';
 const AUTH_API_BASE_URL = 'http://localhost:8080/auth';
+
+
 
 const StoriesManager = () => {
     const [stories, setStories] = useState([]);
@@ -27,7 +30,7 @@ const StoriesManager = () => {
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
     const [deleteObjectId, setDeleteObjectId] = useState('')
     const [deleteObjectName, setDeleteObjectName] = useState('')
-
+    const [bannerUploadImageFile, setBannerUploadImageFile] = useState(null)
 
     useEffect(() => {
         loadStories();
@@ -88,11 +91,26 @@ const StoriesManager = () => {
     const handleCreateStory = async (values) => {
         setLoading(true);
         try {
-            await axios.post(API_BASE_URL, values, {
+            const res = await axios.post(API_BASE_URL, values, {
                 headers: { Authorization: `Bearer ${cookies.accessToken}` }
             });
             message.success("Story created successfully!");
             setIsCreateModalVisible(false);
+            //Here is additional banner upload logic.
+            //Pending request: Refactor.
+            console.log(res)
+            if(bannerUploadImageFile != null){
+                const bannerUploadForm = new FormData()
+                bannerUploadForm.append("banner", bannerUploadImageFile)
+                bannerUploadForm.append("storyId", res.data.story._id) 
+                console.log(bannerUploadForm)
+                await axios.post(API_BASE_URL + "/upload/banner", bannerUploadForm,{
+                    headers: {Authorization: `Bearer ${cookies.accessToken}`}
+                })   
+            }else{
+                alert("There's an error when upload your Banner. Try to upload it again later.")
+            }
+            
             form.resetFields();
             loadStories();
         } catch (error) {
@@ -101,6 +119,8 @@ const StoriesManager = () => {
         } finally {
             setLoading(false);
         }
+        
+        
     };
 
     const handleDeleteStory = async (storyId) => {
@@ -248,12 +268,32 @@ const StoriesManager = () => {
                             visible={isCreateModalVisible}
                             onCancel={handleCancelCreateModal}
                             footer={null}
+                            
                         >
                             <Form
                                 form={form}
                                 layout="vertical"
                                 onFinish={handleCreateStory}
                             >
+                                <Form.Item
+                                    label="Upload banner"
+                                    required={true}
+                                    >
+                                    <Upload
+                                    accept='.jpg, .jpeg, .png, .heic'
+                                    // action=
+                                    beforeUpload={(e)=>{
+                                        // e.preventDefault()
+                                        console.log(e)
+                                        setBannerUploadImageFile(e)
+                                        return false
+                                    }}
+                                    >
+                                        <Button>
+                                            <FaUpload></FaUpload>
+                                        </Button>
+                                    </Upload>
+                                </Form.Item>
                                 <Form.Item
                                     name="title"
                                     label="Title"
@@ -300,8 +340,9 @@ const StoriesManager = () => {
                                 >
                                     <Input.TextArea rows={4} />
                                 </Form.Item>
+                                
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit" loading={loading} disabled={!isAuthorized}>
+                                    <Button type="primary" htmlType="submit" loading={loading} disabled={!isAuthorized} >
                                         Create Story
                                     </Button>
                                     <Button htmlType="button" onClick={handleCancelCreateModal} style={{ marginInlineStart: 8 }} disabled={loading}>

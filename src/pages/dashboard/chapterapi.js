@@ -15,6 +15,7 @@ const chapterUrl = {
     loadCommonContent: baseUrl + '/chapter/contents/:chapterId',
     loadAdvancedContent: baseUrl + '/chapter/contents/:chapterId/private',
     uploadImageContent: baseUrl + '/chapter/save-content/comic/:chapterId',
+    getCommonAllChapterOfStory: baseUrl + '/stories/:storyId/chapters/common'
 };
 
 const chapterApi = {
@@ -104,7 +105,15 @@ const chapterApi = {
             }
         )
         return response
-    }
+    },
+    getCommonAllChapterOfStory: async (storyId, params) => {
+        const trueUrl = chapterUrl.getCommonAllChapterOfStory.replace(':storyId', storyId);
+        const response = await axios.get(trueUrl, {
+            params,
+            // headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {}
+        });
+        return response;
+    },
 };
 
 export default chapterApi;

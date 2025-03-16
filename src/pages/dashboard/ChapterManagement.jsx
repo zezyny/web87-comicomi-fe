@@ -352,7 +352,7 @@ const ChapterManagement = () => {
                 </div>
             </Space>
             <Space style={{ justifyContent: 'space-between', display: 'flex', width: '100%', marginBottom: 16 }}>
-            <p>{storyDesc?storyDesc:"Loading description..."}</p>            
+            <pre style={{textWrap:"wrap", fontFamily:"Arial"}}>{storyDesc?(storyDesc):"Loading description..."}</pre>            
             </Space>
 
             <Table

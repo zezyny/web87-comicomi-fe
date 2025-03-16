@@ -1,0 +1,102 @@
+.universalReader{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    transition: 0.2s ease-in-out;
+}
+.universalReader .header{
+    background-color: #242424;
+    display: grid;
+    height: 50px;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    /* filter: blur(); */
+    /* position: sticky; */
+    width: 100%;
+    top: 0;
+    transition: 0.2s ease-in-out;
+}
+.universalReader .header.hide{
+    transform: translateY(-100%);
+    transition: 0.2s ease-out;
+}
+.universalReader .header *{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.7rem;
+}
+.universalReader .header .pageNumberSection{
+    /* align-items: end; */
+    justify-content: end;
+}
+.universalReader .header img{
+    width: 100%;
+    height: auto;
+}
+.viewportNovel{
+    padding: 10px;
+    overflow-y: scroll;
+    max-width: 1000px;
+    margin: auto;
+    /* margin-bottom: 50px; */
+    height: 100%;
+}
+.viewportNovel h1{
+    font-size: 1.2rem;
+}
+.viewportNovel h2{
+    font-size: 1.1rem;
+}
+.viewportNovel hr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.viewportNovel p{
+    margin-top: 10px;
+}
+
+.universalReader .taskbar{
+    height: 50px;
+    width: 100%;
+    /* position: fixed; */
+    bottom: 0;
+    background-color: #242424;
+    transition: 0.2s ease-in-out;
+}
+.universalReader .taskbar.hide{
+    transform: translateY(100%);
+    transition: 0.2s ease-in-out;
+
+}
+.universalReader.stretchView{
+    grid-template-rows: 0 1fr 0;
+    transition: 0.2s ease-in-out;
+
+}
+.universalReader .taskbar{
+    display: grid;
+    grid-template-columns: 0 1fr 0;
+}
+.chapterSwitchSection{
+    display: flex;
+    align-items: center;
+    justify-content:center ;
+    padding: 10px;
+}
+.chapterSwitchSection .chapterIter{
+    height: 100%;
+    aspect-ratio: 1/1;
+}
+.chapterIter.back{
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+
+}
+.chapterIter.next{
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+
+}
