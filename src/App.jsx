@@ -10,6 +10,10 @@ import AuthForm from './pages/development/DevUseLoginRegister'
 import UserManagementDetail from './pages/dashboard/UserManagementDetail'
 import ComicEditor from './pages/ComicEditor/ComicEditor'
 import NovelEditor from './pages/NovelEditor/NovelEditor'
+// import ChapterManagement from ''
+import ChapterManagement from './pages/dashboard/ChapterManagement'
+import EditorPortal from './pages/portals/editorPortal'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 function App() {
 
@@ -18,13 +22,15 @@ function App() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<AuthForm/>}/>
-        <Route path='/editor/comic' element={<ComicEditor />}/>
-        <Route path='/editor/novel' element={<NovelEditor />}/>
+        <Route path='/editor/comic/:chapterId' element={<ComicEditor />}/>
+        <Route path='/editor/novel/:chapterId' element={<NovelEditor />}/>
+        <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />}/>
         <Route path='/dashboard' element={<DashboardLayout />}>
           <Route path='/dashboard/main' element={<Dashboard />} />
           <Route path='/dashboard/users' element={<UserManagement />} />
           <Route path='/dashboard/stories' element={<StoriesManager />} />
           <Route path='/dashboard/users/:id/detail' element={<UserManagementDetail />} />
+          <Route path='/dashboard/stories/:storyId/detail' element={<ChapterManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>

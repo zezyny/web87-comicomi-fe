@@ -1,0 +1,76 @@
+.editor-toolbar {
+    display: flex;
+    gap: 6px; /* Spacing between toolbar items */
+    padding: 8px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 4px 4px 0 0; /* Rounded top corners */
+    align-items: center; /* Vertically center items */
+}
+
+.editor-toolbar button,
+.editor-toolbar select {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em; /* Consistent font size */
+    line-height: 1; /* Reset line-height for buttons/selects */
+    color: #333;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    outline: none; /* Remove default focus outline */
+}
+
+.editor-toolbar button:hover,
+.editor-toolbar select:hover {
+    background-color: #f0f0f0;
+    border-color: #bbb;
+}
+
+.editor-toolbar button:active,
+.editor-toolbar select:active {
+    background-color: #e0e0e0;
+    border-color: #aaa;
+}
+
+.editor-toolbar button.is-active {
+    background-color: #ddd;
+    border-color: #999;
+}
+
+.editor-toolbar button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.editor-toolbar button:disabled:hover {
+    background-color: white; /* Revert hover effect when disabled */
+    border-color: #ccc;      /* Revert hover effect when disabled */
+}
+
+
+.toolbar-separator {
+    width: 1px;
+    background-color: #ccc;
+    margin: 0 10px; /* Spacing around separator */
+    height: 20px; /* Adjust height as needed to match toolbar height */
+}
+
+/* Style for select dropdown arrow (optional, for better cross-browser consistency) */
+.editor-toolbar select {
+    appearance: none; /* Remove default appearance */
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    padding-right: 30px; /* Space for custom arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Down arrow icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* Style for select options (optional, if you want to customize dropdown options) */
+.editor-toolbar select option {
+    padding: 8px;
+    font-size: 1em;
+}
