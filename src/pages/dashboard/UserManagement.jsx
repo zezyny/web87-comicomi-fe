@@ -66,8 +66,6 @@ const UserManagement = () => {
     };
 
     useEffect(() => {
-        console.log('abc123');
-
         fetchUsers()
         console.log(userData);
     }, [keyword, page, pageSize, deleteCounter, orderBy, orderDirection])
