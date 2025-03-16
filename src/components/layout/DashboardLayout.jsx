@@ -26,23 +26,23 @@ const DashboardLayout = () => {
     const [cookies] = useCookies(['accessToken', 'userRole', 'userId', 'refreshToken']);
     const [currentUser, setCurrentUser] = useState(null)
     const fetchCurrentUser = async (id) => {
-        try{
+        try {
             const response = await userApi.getUser(id)
-            console.log(response.data)
-            if(response.data.role != "admin" && response.data.role != "creator"){
+
+            if (response.data.role != "admin" && response.data.role != "creator") {
                 navigate('/login');
             }
-            console.log("Access token extracted: ",cookies.accessToken)
+            console.log("Access token extracted: ", cookies.accessToken)
             const permissionAccess = await permissionControl.checkAllowAdminOrCreator(cookies.accessToken)
-            if(!permissionAccess){
+            if (!permissionAccess) {
                 permissionControl.kick(navigate)
             }
             setCurrentUser(response.data)
-        }catch(e){
+        } catch (e) {
             alert("There's error when trying to perform authentication for you.")
             permissionControl.kick(navigate)
         }
-        
+
     }
 
     useEffect(() => {
@@ -52,7 +52,7 @@ const DashboardLayout = () => {
 
     const [collapsed, setCollapsed] = useState(false);
     const menuItems = [
-        { key: "/dashboard/main", label: "Dashboard", icon: <DashboardOutlined /> },
+        { key: "/dashboard", label: "Dashboard", icon: <DashboardOutlined /> },
         { key: "/dashboard/users", label: "Users", icon: <UserOutlined />, disabled: currentUser?.role.toLowerCase() === 'admin' ? false : true },
         { key: "/dashboard/stories", label: "Stories", icon: <BookOutlined /> },
         { key: "/dashboard/revenue", label: "Revenue", icon: <DollarOutlined /> },
