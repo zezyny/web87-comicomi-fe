@@ -1,0 +1,13 @@
+.genre-tag {
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  padding: 8px 16px;
+  display: inline-block;
+}
+
+.genre-tag span {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+

@@ -1,0 +1,16 @@
+.reading-app {
+  font-family: Arial, sans-serif;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1;
+  padding: 0 16px 80px 16px;
+  overflow-y: auto;
+}
+

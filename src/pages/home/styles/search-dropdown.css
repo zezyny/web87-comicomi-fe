@@ -1,0 +1,143 @@
+.search-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+}
+
+.search-dropdown-container {
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.search-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.app-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.close-button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  border: none;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search-input-container {
+  position: relative;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 18px;
+}
+
+.search-menu {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-item {
+  padding: 12px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item.with-arrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+}
+
+.menu-item-dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-content {
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item {
+  padding: 10px 16px 10px 32px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.search-results {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.no-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #888;
+  font-size: 14px;
+}
+
