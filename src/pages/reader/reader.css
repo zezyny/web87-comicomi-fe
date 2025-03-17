@@ -1,9 +1,10 @@
-.universalReader{
+.universalReader {
     display: grid;
     grid-template-rows: auto 1fr auto;
     transition: 0.2s ease-in-out;
 }
-.universalReader .header{
+
+.universalReader .header {
     background-color: #242424;
     display: grid;
     height: 50px;
@@ -15,11 +16,13 @@
     top: 0;
     transition: 0.2s ease-in-out;
 }
-.universalReader .header.hide{
+
+.universalReader .header.hide {
     transform: translateY(-100%);
     transition: 0.2s ease-out;
 }
-.universalReader .header *{
+
+.universalReader .header * {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,15 +31,18 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.7rem;
 }
-.universalReader .header .pageNumberSection{
+
+.universalReader .header .pageNumberSection {
     /* align-items: end; */
     justify-content: end;
 }
-.universalReader .header img{
+
+.universalReader .header img {
     width: 100%;
     height: auto;
 }
-.viewportNovel{
+
+.viewportNovel {
     padding: 10px;
     overflow-y: scroll;
     max-width: 1000px;
@@ -44,21 +50,25 @@
     /* margin-bottom: 50px; */
     height: 100%;
 }
-.viewportNovel h1{
+
+.viewportNovel h1 {
     font-size: 1.2rem;
 }
-.viewportNovel h2{
+
+.viewportNovel h2 {
     font-size: 1.1rem;
 }
-.viewportNovel hr{
+
+.viewportNovel hr {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.viewportNovel p{
+
+.viewportNovel p {
     margin-top: 10px;
 }
 
-.universalReader .taskbar{
+.universalReader .taskbar {
     height: 50px;
     width: 100%;
     /* position: fixed; */
@@ -66,37 +76,247 @@
     background-color: #242424;
     transition: 0.2s ease-in-out;
 }
-.universalReader .taskbar.hide{
+
+.universalReader .taskbar.hide {
     transform: translateY(100%);
     transition: 0.2s ease-in-out;
 
 }
-.universalReader.stretchView{
+
+.universalReader.stretchView {
     grid-template-rows: 0 1fr 0;
     transition: 0.2s ease-in-out;
 
 }
-.universalReader .taskbar{
+
+.universalReader .taskbar {
     display: grid;
-    grid-template-columns: 0 1fr 0;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
 }
-.chapterSwitchSection{
+
+.chapterSwitchSection {
     display: flex;
     align-items: center;
-    justify-content:center ;
+    justify-content: center;
     padding: 10px;
 }
-.chapterSwitchSection .chapterIter{
+
+.chapterSwitchSection .chapterIter {
     height: 100%;
     aspect-ratio: 1/1;
 }
-.chapterIter.back{
+
+.chapterIter.back {
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;
 
 }
-.chapterIter.next{
+
+.chapterIter.next {
     border-top-right-radius: 100px;
     border-bottom-right-radius: 100px;
 
+}
+
+.comicRenderer {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    max-width: 600px;
+    margin: auto;
+    height: 100%;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+.comicRenderer img {
+    width: 100%;
+    max-height: max-content;
+    height: auto;
+}
+
+.CommentBoxFloat {
+    width: 100%;
+    height: 70vh;
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    background-color: #242424;
+    transition: 0.2s ease-out;
+}
+
+.CommentBox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* padding: 1rem; */
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.CommentBoxFloat.hide {
+    transform: translateY(100%);
+    transition: 0.2s ease-in;
+}
+
+.CommentBox .closeComment {
+    width: 100%;
+    padding: 5px;
+    background-color: transparent;
+    color: white;
+    /* left: 50%; */
+    /* position: absolute; */
+    border: 0;
+    top: 0;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.CommentBox .Comments {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.CommentDown {
+    transform: rotate(-90deg);
+    transition: 0.2s ease-in-out;
+}
+
+.CommentUp {
+    transform: rotate(90deg);
+    transition: 0.2s ease-in-out;
+}
+
+.OpenCommentButton {
+    height: 100%;
+    aspect-ratio: 1/1;
+    font-size: x-large;
+    background-color: transparent;
+    color: white;
+    outline: none;
+    border: none;
+    float: right;
+}
+
+.CommentItem {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 5rem;
+    padding: 0.5rem;
+    margin-top: 10px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #303030;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #1d1d1d;
+    height: 100px;
+    width: 5px;
+}
+.liked{
+    color: rgb(227, 80, 80);
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #4c4c4c;
+}
+
+.CommentView {
+    display: flex;
+    flex-flow: column;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    gap: 10px;
+}
+
+.CommentView .User {
+    display: flex;
+    gap: 5px;
+    font-size: large;
+    font-weight: bold;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.User .avt {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.CommentAction {
+    display: flex;
+    gap: 20px;
+}
+
+.CommentAction button {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: transparent;
+    color: white;
+    font-size: 0.8rem;
+    outline: none;
+    border: none;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+.Likes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.CommentLike {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.CommentInput {
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    height: 3rem;
+}
+
+.CommentInput button {
+    aspect-ratio: 1/1;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: none;
+    outline: none;
+
+}
+
+.CommentInput input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding: 0.25rem;
+}
+
+.CommentInput.NotLoggedIn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
 }
