@@ -1,0 +1,29 @@
+.logo-image {
+  height: 40px;
+  max-width: 150px;
+  object-fit: contain;
+}
+
+.auth-logo .logo-image {
+  height: 60px;
+  margin-bottom: 16px;
+}
+
+.intro-header .logo-image {
+  height: 50px;
+}
+
+.search-dropdown-header .logo-image {
+  height: 30px;
+}
+
+.page-title-container .logo-image {
+  height: 30px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.app-name .logo-image {
+  vertical-align: middle;
+}
+

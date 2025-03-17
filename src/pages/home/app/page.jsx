@@ -1,26 +1,31 @@
 "use client"
-
-import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import ReadingApp from "@/components/reading-app"
 import CommunityPage from "@/components/community-page"
 import LibraryPage from "@/components/library-page"
 import NotificationPage from "@/components/notification-page"
 
 export default function Home() {
-  const [currentPage, setCurrentPage] = useState("home")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") || "home"
+
+  const handleNavigate = (pageName) => {
+    router.push(`/?page=${pageName}`)
+  }
 
   const renderPage = () => {
-    switch (currentPage) {
+    switch (page) {
       case "home":
-        return <ReadingApp onNavigate={setCurrentPage} />
+        return <ReadingApp onNavigate={handleNavigate} />
       case "community":
-        return <CommunityPage />
+        return <CommunityPage onNavigate={handleNavigate} />
       case "library":
-        return <LibraryPage />
+        return <LibraryPage onNavigate={handleNavigate} />
       case "notifications":
-        return <NotificationPage />
+        return <NotificationPage onNavigate={handleNavigate} />
       default:
-        return <ReadingApp onNavigate={setCurrentPage} />
+        return <ReadingApp onNavigate={handleNavigate} />
     }
   }
 

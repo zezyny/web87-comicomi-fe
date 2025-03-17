@@ -14,7 +14,7 @@ export default function BookCard({ title, author, rating, coverImage, onClick })
       </div>
       <div className="book-info">
         <h3 className="book-title">{title}</h3>
-        <p className="book-author">{author}</p>
+        <p className="book-author">{typeof author === "object" ? author.name : author}</p>
       </div>
     </div>
   )

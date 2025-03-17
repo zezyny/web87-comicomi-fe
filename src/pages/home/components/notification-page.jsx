@@ -4,7 +4,7 @@ import { useState } from "react"
 import SearchDropdown from "./search-dropdown"
 import "../styles/notification-page.css"
 
-export default function NotificationPage() {
+export default function NotificationPage({ onNavigate }) {
   const [activeTab, setActiveTab] = useState("notifications")
   const [activeChat, setActiveChat] = useState(null)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -48,8 +48,7 @@ export default function NotificationPage() {
   ]
 
   const handleNavigate = (page) => {
-    // This would be handled by the parent component in a real app
-    console.log(`Navigate to: ${page}`)
+    onNavigate(page)
   }
 
   const handleNotificationClick = (id) => {
@@ -125,11 +124,17 @@ export default function NotificationPage() {
       {/* Header */}
       <header className="notification-header">
         <div className="user-info">
-          <div className="avatar">
-            <img src="/placeholder.svg?height=40&width=40" alt="User avatar" />
+          <div className="avatar avatar-medium">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/man-eAkD9h9AIcJMsOCkzwm9DOTNDSzZI2.png"
+              alt="User avatar"
+            />
           </div>
           <span className="username">Hasselblad Nguyen</span>
         </div>
+        <button className="back-button" onClick={() => onNavigate("home")}>
+          <span className="back-icon">←</span>
+        </button>
         <button className="search-button" onClick={() => setIsSearchOpen(true)}>
           <span className="search-icon">⌕</span>
         </button>
@@ -137,7 +142,14 @@ export default function NotificationPage() {
 
       {/* Page Title */}
       <div className="page-title-container">
-        <h1 className="page-title">Notifications</h1>
+        <h1 className="page-title">
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/comicomi-logo-ueL8kbSO7bnEY7YX9G4XDaacvbMENX.png"
+            alt="ComiComi"
+            className="logo-image"
+          />
+          Notifications
+        </h1>
       </div>
 
       {/* Notifications List */}
@@ -172,13 +184,13 @@ export default function NotificationPage() {
 
       {/* Bottom Navigation */}
       <nav className="bottom-navigation">
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("home")}>
           <span>Home</span>
         </button>
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("community")}>
           <span className="nav-icon">🌐</span>
         </button>
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("library")}>
           <span className="nav-icon">📄</span>
         </button>
         <button className="nav-item active">

@@ -11,8 +11,11 @@ export default function Header({ name, welcomeMessage, avatarUrl, onNavigate, ge
     <>
       <header className="app-header">
         <div className="user-info">
-          <div className="avatar-container">
-            <img src={avatarUrl || "/placeholder.svg"} alt="User avatar" className="avatar" />
+          <div className="avatar-container avatar-large">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/man-eAkD9h9AIcJMsOCkzwm9DOTNDSzZI2.png"
+              alt="User avatar"
+            />
           </div>
           <div className="user-details">
             <h1 className="user-name">{name}</h1>

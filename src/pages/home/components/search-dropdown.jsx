@@ -30,7 +30,13 @@ export default function SearchDropdown({ isOpen, onClose, onNavigate, genres }) 
     <div className="search-dropdown-overlay">
       <div className="search-dropdown-container" ref={dropdownRef}>
         <div className="search-dropdown-header">
-          <h2 className="app-name">OsmiOsmi</h2>
+          <div className="app-name">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/comicomi-logo-ueL8kbSO7bnEY7YX9G4XDaacvbMENX.png"
+              alt="ComiComi"
+              className="logo-image"
+            />
+          </div>
           <button className="close-button" onClick={onClose}>
             ×
           </button>

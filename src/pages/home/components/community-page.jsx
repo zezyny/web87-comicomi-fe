@@ -4,7 +4,7 @@ import { useState } from "react"
 import SearchDropdown from "./search-dropdown"
 import "../styles/community-page.css"
 
-export default function CommunityPage() {
+export default function CommunityPage({ onNavigate }) {
   const [activeTab, setActiveTab] = useState("discover")
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
@@ -75,11 +75,17 @@ export default function CommunityPage() {
       {/* Header */}
       <header className="community-header">
         <div className="user-info">
-          <div className="avatar">
-            <img src="/placeholder.svg?height=40&width=40" alt="User avatar" />
+          <div className="avatar avatar-medium">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/man-eAkD9h9AIcJMsOCkzwm9DOTNDSzZI2.png"
+              alt="User avatar"
+            />
           </div>
           <span className="username">Hasselblad Nguyen</span>
         </div>
+        <button className="back-button" onClick={() => onNavigate("home")}>
+          <span className="back-icon">←</span>
+        </button>
         <button className="search-button" onClick={() => setIsSearchOpen(true)}>
           <span className="search-icon">⌕</span>
         </button>
@@ -87,7 +93,14 @@ export default function CommunityPage() {
 
       {/* Page Title */}
       <div className="page-title-container">
-        <h1 className="page-title">Community Forum</h1>
+        <h1 className="page-title">
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/comicomi-logo-ueL8kbSO7bnEY7YX9G4XDaacvbMENX.png"
+            alt="ComiComi"
+            className="logo-image"
+          />
+          Community Forum
+        </h1>
       </div>
 
       {/* Posts Feed */}
@@ -136,16 +149,16 @@ export default function CommunityPage() {
 
       {/* Bottom Navigation */}
       <nav className="bottom-navigation">
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("home")}>
           <span>Home</span>
         </button>
         <button className="nav-item active">
           <span className="nav-icon">🌐</span>
         </button>
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("library")}>
           <span className="nav-icon">📄</span>
         </button>
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("notifications")}>
           <span className="nav-icon">🔔</span>
           <span className="notification-dot"></span>
         </button>
@@ -154,7 +167,7 @@ export default function CommunityPage() {
       <SearchDropdown
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        onNavigate={handleNavigate}
+        onNavigate={onNavigate}
         genres={genres}
       />
     </div>

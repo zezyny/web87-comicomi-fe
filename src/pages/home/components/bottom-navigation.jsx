@@ -10,13 +10,16 @@ export default function BottomNavigation({ activeTab, onTabChange, hasNotificati
       </button>
 
       <button
-        className={activeTab === "discover" ? "nav-item active" : "nav-item"}
-        onClick={() => onTabChange("discover")}
+        className={activeTab === "community" ? "nav-item active" : "nav-item"}
+        onClick={() => onTabChange("community")}
       >
         <span className="nav-icon">🌐</span>
       </button>
 
-      <button className={activeTab === "news" ? "nav-item active" : "nav-item"} onClick={() => onTabChange("news")}>
+      <button
+        className={activeTab === "library" ? "nav-item active" : "nav-item"}
+        onClick={() => onTabChange("library")}
+      >
         <span className="nav-icon">📄</span>
       </button>
 

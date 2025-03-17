@@ -4,7 +4,7 @@ import { useState } from "react"
 import SearchDropdown from "./search-dropdown"
 import "../styles/library-page.css"
 
-export default function LibraryPage() {
+export default function LibraryPage({ onNavigate }) {
   const [activeTab, setActiveTab] = useState("news")
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
@@ -91,8 +91,7 @@ export default function LibraryPage() {
   ]
 
   const handleNavigate = (page) => {
-    // This would be handled by the parent component in a real app
-    console.log(`Navigate to: ${page}`)
+    onNavigate(page)
   }
 
   const renderBookGrid = (books, sectionTitle) => (
@@ -107,7 +106,7 @@ export default function LibraryPage() {
             </div>
             <div className="book-info">
               <h3 className="book-title">{book.title}</h3>
-              <p className="book-author">{book.author}</p>
+              <p className="book-author">{typeof book.author === "object" ? book.author.name : book.author}</p>
             </div>
           </div>
         ))}
@@ -120,11 +119,17 @@ export default function LibraryPage() {
       {/* Header */}
       <header className="library-header">
         <div className="user-info">
-          <div className="avatar">
-            <img src="/placeholder.svg?height=40&width=40" alt="User avatar" />
+          <div className="avatar avatar-medium">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/man-eAkD9h9AIcJMsOCkzwm9DOTNDSzZI2.png"
+              alt="User avatar"
+            />
           </div>
           <span className="username">Hasselblad Nguyen</span>
         </div>
+        <button className="back-button" onClick={() => onNavigate("home")}>
+          <span className="back-icon">←</span>
+        </button>
         <button className="search-button" onClick={() => setIsSearchOpen(true)}>
           <span className="search-icon">⌕</span>
         </button>
@@ -132,7 +137,14 @@ export default function LibraryPage() {
 
       {/* Page Title */}
       <div className="page-title-container">
-        <h1 className="page-title">My Library</h1>
+        <h1 className="page-title">
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/comicomi-logo-ueL8kbSO7bnEY7YX9G4XDaacvbMENX.png"
+            alt="ComiComi"
+            className="logo-image"
+          />
+          My Library
+        </h1>
       </div>
 
       {/* Book Sections */}
@@ -144,16 +156,16 @@ export default function LibraryPage() {
 
       {/* Bottom Navigation */}
       <nav className="bottom-navigation">
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("home")}>
           <span>Home</span>
         </button>
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("community")}>
           <span className="nav-icon">🌐</span>
         </button>
         <button className="nav-item active">
           <span className="nav-icon">📄</span>
         </button>
-        <button className="nav-item">
+        <button className="nav-item" onClick={() => onNavigate("notifications")}>
           <span className="nav-icon">🔔</span>
           <span className="notification-dot"></span>
         </button>

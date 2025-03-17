@@ -22,11 +22,9 @@
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #4cdeaa;
+  background-color: transparent;
 }
 
 .avatar img {
@@ -56,6 +54,7 @@
 
 .search-icon {
   font-weight: bold;
+  color: white;
 }
 
 /* Book Cover Section */
@@ -280,6 +279,16 @@
   padding: 12px;
   background-color: #f9f9f9;
   border-radius: 12px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.community-post:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.community-post:active {
+  transform: translateY(0);
 }
 
 .post-user {
@@ -357,54 +366,173 @@
   line-height: 1.4;
 }
 
-/* Bottom Navigation */
-.bottom-navigation {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: white;
+/* Post and Comment Actions */
+.post-actions,
+.comment-actions {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  border-top: 1px solid #eee;
-  z-index: 100;
+  gap: 16px;
+  margin-top: 8px;
 }
 
-.nav-item {
+.like-action,
+.reply-action,
+.view-replies-action {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
   background: none;
   border: none;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 16px;
+  transition: background-color 0.2s;
+}
+
+.like-action:hover,
+.reply-action:hover,
+.view-replies-action:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.like-action.liked {
+  color: #ff3b5c;
+}
+
+.like-action.small {
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.action-icon {
+  font-size: 16px;
+}
+
+.like-count {
+  font-size: 14px;
+}
+
+/* Replies Section */
+.replies-section {
+  margin-top: 8px;
+  margin-left: 24px;
+  padding-left: 12px;
+  border-left: 2px solid #eee;
+}
+
+.reply-item {
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.reply-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.reply-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.reply-username {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.reply-time {
+  font-size: 10px;
   color: #888;
-  position: relative;
-  flex: 1;
-  height: 100%;
+}
+
+.reply-content {
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+/* Reply Form */
+.reply-form {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.reply-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reply-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.reply-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cancel-reply,
+.submit-reply {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
 }
 
-.nav-item.active {
-  color: #000;
-  font-weight: 600;
-  background-color: #f5f5f5;
-  border-radius: 20px;
-  margin: 8px;
+.cancel-reply {
+  background: none;
+  border: none;
+  color: #666;
 }
 
-.nav-icon {
-  font-size: 20px;
+.submit-reply {
+  background-color: #7b3ff2;
+  color: white;
+  border: none;
 }
 
-.notification-dot {
-  position: absolute;
-  top: 10px;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background-color: #ff0000;
-  border-radius: 50%;
+.submit-reply:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Community Post */
+.community-post {
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+}
+
+.community-post .post-content {
+  cursor: pointer;
+}
+
+.community-post .post-content:hover {
+  text-decoration: underline;
+}
+
+/* Comments */
+.comment-item {
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 

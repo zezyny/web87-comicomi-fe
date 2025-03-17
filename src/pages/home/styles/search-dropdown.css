@@ -34,6 +34,11 @@
   margin: 0;
 }
 
+.app-name .logo-image {
+  height: 30px;
+  vertical-align: middle;
+}
+
 .close-button {
   width: 24px;
   height: 24px;
@@ -68,6 +73,7 @@
   transform: translateY(-50%);
   color: #888;
   font-size: 18px;
+  font-weight: bold;
 }
 
 .search-menu {
