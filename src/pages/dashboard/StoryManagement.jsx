@@ -42,10 +42,6 @@ const StoriesManager = () => {
             error => {
                 if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                     console.error("Authentication error (401/403), redirecting to login:", error);
-                    setCookie('accessToken', ''); // removeCookie is available from useCookies
-                    setCookie('refreshToken', '');
-                    setCookie('userRole', '');
-                    setCookie('userId', '');
                     message.error("Session expired. Please login again.");
                     navigate('/login');
                 }

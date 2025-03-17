@@ -25,6 +25,7 @@ const DashboardLayout = () => {
     let navigate = useNavigate()
     const [cookies] = useCookies(['accessToken', 'userRole', 'userId', 'refreshToken']);
     const [currentUser, setCurrentUser] = useState(null)
+
     const fetchCurrentUser = async (id) => {
         try {
             const response = await userApi.getUser(id)
@@ -39,7 +40,7 @@ const DashboardLayout = () => {
             }
             setCurrentUser(response.data)
         } catch (e) {
-            alert("There's error when trying to perform authentication for you.")
+            // alert("There's error when trying to perform authentication for you.")
             permissionControl.kick(navigate)
         }
 
