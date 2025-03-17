@@ -95,18 +95,18 @@ const StoriesManager = () => {
             //Here is additional banner upload logic.
             //Pending request: Refactor.
             console.log(res)
-            if(bannerUploadImageFile != null){
+            if (bannerUploadImageFile != null) {
                 const bannerUploadForm = new FormData()
                 bannerUploadForm.append("banner", bannerUploadImageFile)
-                bannerUploadForm.append("storyId", res.data.story._id) 
+                bannerUploadForm.append("storyId", res.data.story._id)
                 console.log(bannerUploadForm)
-                await axios.post(API_BASE_URL + "/upload/banner", bannerUploadForm,{
-                    headers: {Authorization: `Bearer ${cookies.accessToken}`}
-                })   
-            }else{
+                await axios.post(API_BASE_URL + "/upload/banner", bannerUploadForm, {
+                    headers: { Authorization: `Bearer ${cookies.accessToken}` }
+                })
+            } else {
                 alert("There's an error when upload your Banner. Try to upload it again later.")
             }
-            
+
             form.resetFields();
             loadStories();
         } catch (error) {
@@ -115,8 +115,8 @@ const StoriesManager = () => {
         } finally {
             setLoading(false);
         }
-        
-        
+
+
     };
 
     const handleDeleteStory = async (storyId) => {
@@ -145,12 +145,12 @@ const StoriesManager = () => {
         }
     };
 
-    const confirmDeleteStoryOK = () =>{
+    const confirmDeleteStoryOK = () => {
         setConfirmModalVisible(false)
         handleDeleteStory(deleteObjectId);
     }
 
-    const confirmDeleteStoryCancel = () =>{
+    const confirmDeleteStoryCancel = () => {
         setConfirmModalVisible(false)
         setDeleteObjectId('')
         setDeleteObjectName('')
@@ -264,7 +264,7 @@ const StoriesManager = () => {
                             visible={isCreateModalVisible}
                             onCancel={handleCancelCreateModal}
                             footer={null}
-                            
+
                         >
                             <Form
                                 form={form}
@@ -274,16 +274,16 @@ const StoriesManager = () => {
                                 <Form.Item
                                     label="Upload banner"
                                     required={true}
-                                    >
+                                >
                                     <Upload
-                                    accept='.jpg, .jpeg, .png, .heic'
-                                    // action=
-                                    beforeUpload={(e)=>{
-                                        // e.preventDefault()
-                                        console.log(e)
-                                        setBannerUploadImageFile(e)
-                                        return false
-                                    }}
+                                        accept='.jpg, .jpeg, .png, .heic'
+                                        // action=
+                                        beforeUpload={(e) => {
+                                            // e.preventDefault()
+                                            console.log(e)
+                                            setBannerUploadImageFile(e)
+                                            return false
+                                        }}
                                     >
                                         <Button>
                                             <FaUpload></FaUpload>
@@ -310,9 +310,13 @@ const StoriesManager = () => {
                                 <Form.Item
                                     name="genre"
                                     label="Genre"
-                                    rules={[{ required: true, message: 'Please select genres!' }]}
+                                    rules={[{ required: true, message: 'Please select or input genres!' }]}
                                 >
-                                    <Select mode="multiple" placeholder="Select genres">
+                                    <Select
+                                        mode="tags"
+                                        placeholder="Select or type genres"
+                                        tokenSeparators={[' ']} 
+                                    >
                                         <Select.Option value="comedy">Comedy</Select.Option>
                                         <Select.Option value="drama">Drama</Select.Option>
                                         <Select.Option value="fantasy">Fantasy</Select.Option>
@@ -336,7 +340,7 @@ const StoriesManager = () => {
                                 >
                                     <Input.TextArea rows={4} />
                                 </Form.Item>
-                                
+
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" loading={loading} disabled={!isAuthorized} >
                                         Create Story
@@ -347,8 +351,8 @@ const StoriesManager = () => {
                                 </Form.Item>
                             </Form>
                         </Modal>
-                        
-                        
+
+
                         <Modal
                             title={"Are you sure to delete " + deleteObjectName + "?"}
                             visible={confirmModalVisible}
@@ -357,7 +361,7 @@ const StoriesManager = () => {
                                 <Button key="back" onClick={confirmDeleteStoryCancel}>
                                     Cancel
                                 </Button>,
-                                <Button key="submit" type="primary" onClick={confirmDeleteStoryOK} style={{backgroundColor:"#FF0000"}}>
+                                <Button key="submit" type="primary" onClick={confirmDeleteStoryOK} style={{ backgroundColor: "#FF0000" }}>
                                     Delete
                                 </Button>,
                             ]}

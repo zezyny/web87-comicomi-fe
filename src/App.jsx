@@ -16,6 +16,7 @@ import EditorPortal from './pages/portals/editorPortal'
 import UniversalReader from './pages/reader/universalReader'
 import Revenue from './pages/dashboard/Revenue'
 // import '@fontawesome/fontawesome-free/css/all.min.css'
+import HomeComicModal from './components/home/HomeComicModal'
 
 function App() {
 
@@ -32,6 +33,8 @@ function App() {
         <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />} />
         <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />}/>
         <Route path='/reader/:storyId/chapter/:chapterId' element={<UniversalReader />}/>
+        <Route path='/test/homemodal' element={<HomeComicModal />}/>
+
         <Route element={<DashboardLayout />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/dashboard/users' element={<UserManagement />} />
