@@ -23,17 +23,15 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path='/login' element={<AuthForm/>}/>
-        <Route path='/editor/comic/:chapterId' element={<ComicEditor />}/>
-        <Route path='/editor/novel/:chapterId' element={<NovelEditor />}/>
-        <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />}/>
-        <Route path='/reader/:storyId/chapter/:chapterId' element={<UniversalReader />}/>
+
         {/* <Route path='/dashboard' element={<DashboardLayout />}> */}
         <Route path='/dashboard/main' element={<Dashboard />} />
-        <Route path='/login' element={<AuthForm />} />
+        <Route path='/dev/login' element={<AuthForm />} />
         <Route path='/editor/comic/:chapterId' element={<ComicEditor />} />
         <Route path='/editor/novel/:chapterId' element={<NovelEditor />} />
         <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />} />
+        <Route path='/editor/portal/:storyId/chapter/:chapterId' element={<EditorPortal />}/>
+        <Route path='/reader/:storyId/chapter/:chapterId' element={<UniversalReader />}/>
         <Route element={<DashboardLayout />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/dashboard/users' element={<UserManagement />} />
