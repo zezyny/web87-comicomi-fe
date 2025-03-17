@@ -7,6 +7,8 @@ const authUrl = {
     checkCreator: baseUrl + '/creator',
     checkAdminOrCreator: baseUrl + '/adminorcreator',
     checkAcessStoryEdit: baseUrl + '/editor/haveaccess/:chapterId',
+    checkUser: baseUrl + '/validate-user',
+    refreshToken: baseUrl + '/refresh-token'
 };
 
 export const permissionControl = {
@@ -56,6 +58,33 @@ export const permissionControl = {
         } catch(error){
             console.log("Error: You don't have access to edit this content. Error MSG", error)
             return false
+        }
+    },
+    refreshToken: async(refreshToken) => {
+        try{
+            const response = await axios.post(authUrl.refreshToken, {
+                refreshToken: refreshToken
+            })
+            if(response.status == 200){
+                return response.data.accessToken
+            }else{
+                return null;
+            }
+        }catch(err){
+            console.log("Err: Can't refresh token.")
+        }
+    },
+    checkUser: async(accessToken) => {
+        try{
+            const response = await(axios.get(authUrl.checkUser, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            }))
+            return(response)
+        }catch(err){
+            console.log("Error on validate user.")
+            console.log(err)
         }
     },
     kick: (navigate) => {

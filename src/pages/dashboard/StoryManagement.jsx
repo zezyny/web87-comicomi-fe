@@ -258,7 +258,7 @@ const StoriesManager = () => {
                                     dataSource={stories}
                                     rowKey="_id"
                                     ref={tableRef}
-                                    pagination={{ pageSize: 50 }}
+                                    pagination={{ pageSize: 10 }}
                                 />
                             )}
                         </div>
